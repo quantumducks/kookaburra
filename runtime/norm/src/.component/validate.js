@@ -32,11 +32,11 @@ const receivers = (manifest) => {
     }
 
     if (!TYPES.has(manifest.operations[receiver.operation].type)) {
-      throw new Error(`Receiver '${locator}' must refer to an operation of one of the allowed types: ${Array.from(TYPES).join(', ')}`)
+      throw new Error(`Receiver '${locator}' must refer to an operation of the allowed types: ${Array.from(TYPES).join(', ')}`)
     }
   }
 }
 
-const TYPES = new Set(['transition', 'effect'])
+const TYPES = new Set(['transition', 'effect', 'unmanaged'])
 
 exports.validate = validate
