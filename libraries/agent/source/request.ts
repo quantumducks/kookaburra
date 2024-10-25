@@ -33,3 +33,7 @@ export function parse (http: string, origin?: string): HTTPRequest {
 
   return { method, headers, body, url: href }
 }
+
+export async function close (): Promise<void> {
+  await Promise.allSettled([...pools.values()].map(async (pool) => pool.close()))
+}
