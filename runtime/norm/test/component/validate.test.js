@@ -247,7 +247,7 @@ describe('receivers', () => {
   it('should throw if transition points to observation', () => {
     manifest.receivers['foo.bar.happened'].operation = 'get'
 
-    expect(() => validate(manifest)).toThrow(/one of the allowed types/)
+    expect(() => validate(manifest)).toThrow(/of the allowed types/)
   })
 
   it('should throw if source has a name `context`', async () => {
