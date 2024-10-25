@@ -30,8 +30,10 @@ export function request (input: string, origin?: string): HTTPRequest {
   parser.execute(buffer)
   parser.finish()
 
-  if (!complete)
+  if (!complete) {
+    console.error(input)
     throw new Error('Failed to parse request')
+  }
 
   if (bodyChunks.length > 0)
     request.body = Buffer.concat(bodyChunks)
