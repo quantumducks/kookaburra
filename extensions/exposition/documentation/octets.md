@@ -23,8 +23,12 @@ If request's `content-type` is not acceptable, or if the request body does not p
 the [validation](/extensions/storages/readme.md#async-putpath-string-stream-readable-options-options-maybeentry),
 the request is rejected with a `415 Unsupported Media Type` response.
 
-The value of the directive is `null` or an object with the following properties:
+The value of the directive must be `null` (defaults) or an object with the following optional
+properties:
 
+- `location`: a string that represents the path to store the
+  content.
+  If not specified, the path is the same as the request path.
 - `limit`: [maximum size](#stream-size-limit) of the incoming stream.
 - `accept`: a media type or an array of media types that are acceptable.
   If the `accept` property is not specified, any media type is acceptable (which is the default).
@@ -44,6 +48,8 @@ The value of the directive is `null` or an object with the following properties:
         resize: images.resize
         analyze: images.analyze
 ```
+
+### Headers
 
 `content-id` header can be used to set the ID of the Entry.
 The value must match the following regular expression `^[a-zA-Z0-9-_]{1,16}$`.
@@ -70,6 +76,21 @@ attributes:
 ```
 
 If the Entry already exists, the `content-attributes` header is ignored.
+
+### Location
+
+The `location` property can be used to store the content under a different path.
+
+```yaml
+/images:
+  octets:context: images
+  POST:
+    octets:put:
+      location: /archive
+```
+
+Physical storage path is constructed by resolving the `location`
+property [relative](https://datatracker.ietf.org/doc/html/rfc3986#section-5) to the request path.
 
 ### Stream size limit
 

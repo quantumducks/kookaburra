@@ -19,6 +19,7 @@ import type { Input } from './types'
 export class Put extends Directive {
   public readonly targeted = false
 
+  private readonly location?: string
   private readonly accept?: string
   private readonly limit: number
   private readonly limitString: string
@@ -45,6 +46,9 @@ export class Put extends Directive {
       this.trust = options.trust.map((value: string) =>
         value.startsWith('/') ? new RegExp(value.slice(1, -1)) : value)
 
+    if (options?.location !== undefined)
+      this.location = options.location
+
     this.limitString = options?.limit ?? '64MiB'
     this.limit = toBytes(this.limitString)
     this.discovery.storage = discovery
@@ -60,6 +64,7 @@ export class Put extends Directive {
       input: {
         storage,
         request: input.request,
+        location: this.location,
         accept: this.accept,
         limit: this.limit,
         trust: this.trust
@@ -108,6 +113,7 @@ export class Put extends Directive {
 }
 
 export interface Options {
+  location?: string
   accept?: string | string[]
   limit?: string
   workflow?: Unit[] | Unit
@@ -118,6 +124,7 @@ interface StoreRequest {
   input: {
     storage: string
     request: Input['request']
+    location?: string
     accept?: string
     limit?: number
     trust?: Array<string | RegExp>

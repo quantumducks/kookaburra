@@ -1,6 +1,8 @@
 type: object
 nullable: true
 properties:
+  location:
+    type: string
   accept:
     anyOf:
       - type: string
@@ -23,3 +25,4 @@ properties:
             type: string
       - type: array
         items: *unit
+additionalProperties: false

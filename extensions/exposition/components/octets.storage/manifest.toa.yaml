@@ -9,6 +9,7 @@ operations:
     input:
       storage*: string
       request*: ~
+      location: string
       accept: string
       limit: number
       trust: ~ # array of strings or regular expressions
