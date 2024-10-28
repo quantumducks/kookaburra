@@ -51,14 +51,17 @@ Feature: Octets with Cloudinary storage
       POST / HTTP/1.1
       host: nex.toa.io
       content-type: image/png
+      accept: application/yaml
       """
     Then the following reply is sent:
       """
       201 Created
+
+      id: ${{ id }}
       """
     When the following request is received:
       """
-      GET /814a0034f5549e957ee61360d87457e5.48x48.jpeg HTTP/1.1
+      GET /${{ id }}.48x48.jpeg HTTP/1.1
       host: nex.toa.io
       """
     Then the stream equals to `lenna.48x48.jpeg` is sent with the following headers:

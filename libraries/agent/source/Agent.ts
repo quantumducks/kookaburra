@@ -6,7 +6,7 @@ import { trim } from '@toa.io/generic'
 import * as undici from 'undici'
 import { meros } from 'meros/node'
 import * as protocol from './index'
-import { parse, request, close } from './request'
+import { parse, request } from './request'
 import * as parser from './parse'
 import { Captures } from './Captures'
 import type { Readable } from 'stream'
@@ -75,7 +75,6 @@ export class Agent {
       response.destroy()
 
     this.pending.clear()
-    await close()
   }
 
   public responseIncludes (expected: string): void {
