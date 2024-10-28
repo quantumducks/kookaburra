@@ -1,16 +1,17 @@
 'use strict'
 
 const { Readable } = require('node:stream')
+const { posix } = require('node:path')
 const { Err } = require('error-value')
 const { match } = require('matchacho')
 
 async function put (input, context) {
-  const { storage, request, accept, limit, trust } = input
-  const path = request.url
+  const { storage, request, location, accept, limit, trust } = input
+  const url = request.url
   const id = request.headers['content-id']
   const claim = request.headers['content-type']
   const attributes = parseAttributes(request.headers['content-attributes'])
-  const location = request.headers['content-location']
+  const reference = request.headers['content-location']
 
   /** @type {Readable} */
   let body = request
@@ -24,25 +25,27 @@ async function put (input, context) {
     options.id = id
   }
 
-  if (location !== undefined) {
+  if (reference !== undefined) {
     const length = Number.parseInt(request.headers['content-length'])
 
     if (length !== 0)
       return ERR_LENGTH
 
-    if (!trusted(location, trust))
+    if (!trusted(reference, trust))
       return ERR_UNTRUSTED
 
-    body = await download(location)
+    body = await download(reference)
 
     if (body instanceof Error)
       return body
 
-    options.origin = location
+    options.origin = reference
   }
 
   if (limit !== undefined)
     options.limit = limit
+
+  const path = posix.resolve(url, location ?? '.')
 
   return context.storages[storage].put(path, body, options)
 }
