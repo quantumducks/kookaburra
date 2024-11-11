@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.exposition",
-  "version": "1.0.0-alpha.112",
+  "version": "1.0.0-alpha.113",
   "description": "Toa Exposition",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@toa.io/agent": "1.0.0-alpha.112",
-    "@toa.io/extensions.storages": "1.0.0-alpha.106",
+    "@toa.io/extensions.storages": "1.0.0-alpha.113",
     "@types/bcryptjs": "2.4.3",
     "@types/cors": "2.8.13",
     "@types/http-cache-semantics": "4.0.4",
