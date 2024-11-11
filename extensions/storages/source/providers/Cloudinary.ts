@@ -148,7 +148,10 @@ export class Cloudinary extends Provider<CloudinaryOptions> {
     const response = await fetch(url, { method }).catch((e) => e)
 
     if (response instanceof Error || response.ok === false) {
-      console.debug('Failed to fetch from Cloudinary', response)
+      console.debug('Failed to fetch from Cloudinary', {
+        url,
+        message: response.message
+      })
 
       return ERR_NOT_FOUND
     }
