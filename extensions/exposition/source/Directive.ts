@@ -11,17 +11,24 @@ export class Directives implements RTD.Directives {
   }
 
   public async preflight (context: Context, parameters: RTD.Parameter[]): Promise<Output> {
+    let output = null
+
     for (const set of this.sets) {
       if (set.family.preflight === undefined)
         continue
 
-      const output = await set.family.preflight(set.directives, context, parameters)
+      const out = await set.family.preflight(set.directives, context, parameters)
+
+      if (out === null)
+        continue
 
       if (output !== null)
-        return output
+        throw new Error('Multiple preflight directives responded')
+      else
+        output = out
     }
 
-    return null
+    return output
   }
 
   public async settle (context: Context, response: OutgoingMessage): Promise<void> {
