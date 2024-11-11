@@ -13,11 +13,6 @@ Feature: Octets storage workflows
               - add-foo: octets.tester.foo
                 add-bar: octets.tester.bar
               - add-baz: octets.tester.baz
-        /*:
-          io:output: true
-          GET:
-            octets:get:
-              meta: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
@@ -33,9 +28,10 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
-      type: application/octet-stream
+      id: ${{ id }}
       size: 8169
+      type: application/octet-stream
+      checksum: 10cf16b458f759e0d617f2f3d83599ff
       --cut
 
       step: add-foo
@@ -51,6 +47,39 @@ Feature: Octets storage workflows
       step: add-baz
       status: completed
       --cut--
+      """
+
+  Scenario: Composing workflow results
+    Given the `octets.tester` is running
+    And the annotation:
+      """yaml
+      /:
+        auth:anonymous: true
+        octets:context: octets
+        POST:
+          octets:put:
+            workflow:
+              - add-foo: octets.tester.foo
+                add-bar: octets.tester.bar
+              - add-baz: octets.tester.baz
+          flow:compose:
+            checksum: $[0].checksum
+            bar: $[2].output.bar
+      """
+    When the stream of `lenna.ascii` is received with the following headers:
+      """
+      POST / HTTP/1.1
+      host: nex.toa.io
+      accept: application/yaml, multipart/yaml
+      content-type: application/octet-stream
+      """
+    Then the following reply is sent:
+      """
+      201 Created
+      content-type: application/yaml
+
+      checksum: 10cf16b458f759e0d617f2f3d83599ff
+      bar: baz
       """
 
   Scenario: Getting error when running workflow on `store`
