@@ -1,1 +1,1 @@
-export { Workflow, type Unit } from './Workflow'
+export { Workflow, type Unit, type Location } from './Workflow'

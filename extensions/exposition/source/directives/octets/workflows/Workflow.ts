@@ -4,7 +4,6 @@ import { Execution } from './Execution'
 import type { Entry } from '@toa.io/extensions.storages'
 import type { Context } from './Execution'
 import type { Parameter } from '../../../RTD'
-import type { Input } from '../types'
 import type { Remotes } from '../../../Remotes'
 
 export class Workflow {
@@ -19,19 +18,28 @@ export class Workflow {
     this.remotes = remotes
   }
 
-  // eslint-disable-next-line max-params
-  public execute (input: Input, storage: string, entry: Entry, params: Parameter[]): Execution {
-    const path = posix.join(input.request.url, entry.id)
-    const authority = input.authority
+  public execute (location: Location, entry: Entry, params: Parameter[]): Execution {
     const parameters: Record<string, string> = {}
 
     for (const { name, value } of params)
       parameters[name] = value
 
-    const context: Context = { authority, storage, path, entry, parameters }
+    const context: Context = {
+      authority: location.authority,
+      storage: location.storage,
+      path: posix.join(location.path, entry.id),
+      entry,
+      parameters
+    }
 
     return new Execution(context, this.units, this.remotes)
   }
+}
+
+export interface Location {
+  storage: string
+  authority: string
+  path: string
 }
 
 export type Unit = Record<string, string>

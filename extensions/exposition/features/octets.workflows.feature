@@ -109,7 +109,7 @@ Feature: Octets storage workflows
       content-type: multipart/yaml; boundary=cut
 
       --cut
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
       size: 8169
       --cut
@@ -135,27 +135,32 @@ Feature: Octets storage workflows
         octets:context: octets
         POST:
           octets:put: ~
+          io:output: true
         /*:
           GET:
             octets:get: ~
           DELETE:
             octets:delete:
               workflow:
-                echo: octets.tester.echo
+                echo: octets.tester.id
+            io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
       POST / HTTP/1.1
       host: nex.toa.io
       content-type: application/octet-stream
+      accept: application/yaml
       """
     Then the following reply is sent:
       """
       201 Created
+
+      id: ${{ id }}
       """
     When the following request is received:
       """
-      DELETE /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      DELETE /${{ id }} HTTP/1.1
       host: nex.toa.io
       accept: application/yaml, multipart/yaml
       """
@@ -167,12 +172,12 @@ Feature: Octets storage workflows
       --cut
       step: echo
       status: completed
-      output: 10cf16b458f759e0d617f2f3d83599ff
+      output: ${{ id }}
       --cut--
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      GET /${{ id }} HTTP/1.1
       host: nex.toa.io
       """
     Then the following reply is sent:
@@ -189,6 +194,7 @@ Feature: Octets storage workflows
         octets:context: octets
         POST:
           octets:put: ~
+          io:output: true
         /*:
           GET:
             octets:get: ~
@@ -196,20 +202,24 @@ Feature: Octets storage workflows
             octets:delete:
               workflow:
                 err: octets.tester.err
+            io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
       POST / HTTP/1.1
       host: nex.toa.io
       content-type: application/octet-stream
+      accept: application/yaml
       """
     Then the following reply is sent:
       """
       201 Created
+
+      id: ${{ id }}
       """
     When the following request is received:
       """
-      DELETE /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      DELETE /${{ id }} HTTP/1.1
       host: nex.toa.io
       accept: application/yaml, multipart/yaml
       """
@@ -229,7 +239,7 @@ Feature: Octets storage workflows
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      GET /${{ id }} HTTP/1.1
       host: nex.toa.io
       """
     Then the following reply is sent:
@@ -249,6 +259,7 @@ Feature: Octets storage workflows
             octets:put:
               workflow:
                 concat: octets.tester.concat
+            io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
@@ -264,7 +275,7 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
       size: 8169
       --cut
@@ -287,6 +298,7 @@ Feature: Octets storage workflows
             octets:put:
               workflow:
                 authority: octets.tester.authority
+            io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
@@ -302,7 +314,7 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
       size: 8169
       --cut
@@ -322,24 +334,29 @@ Feature: Octets storage workflows
         octets:context: octets
         POST:
           octets:put: ~
+          io:output: true
         /*:
           DELETE:
             octets:workflow:
-              echo: octets.tester.echo
+              id: octets.tester.id
+            io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
       POST / HTTP/1.1
       host: nex.toa.io
       content-type: application/octet-stream
+      accept: application/yaml
       """
     Then the following reply is sent:
       """
       201 Created
+
+      id: ${{ id }}
       """
     When the following request is received:
       """
-      DELETE /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      DELETE /${{ id }} HTTP/1.1
       host: nex.toa.io
       accept: application/yaml, multipart/yaml
       """
@@ -350,9 +367,9 @@ Feature: Octets storage workflows
 
       --cut
 
-      step: echo
+      step: id
       status: completed
-      output: 10cf16b458f759e0d617f2f3d83599ff
+      output: ${{ id }}
 
       --cut--
       """
@@ -369,6 +386,7 @@ Feature: Octets storage workflows
             workflow:
               - foo: octets.tester.foo
               - yield: octets.tester.yield
+          io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
@@ -384,7 +402,7 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
 
       --cut
@@ -421,6 +439,7 @@ Feature: Octets storage workflows
           octets:put:
             workflow:
               yield: octets.tester.yex
+          io:output: true
       """
     When the stream of `lenna.ascii` is received with the following headers:
       """
@@ -436,7 +455,7 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
 
       --cut
@@ -464,12 +483,12 @@ Feature: Octets storage workflows
       /:
         auth:anonymous: true
         octets:context: octets
+        io:output: true
         POST:
           octets:put:
             workflow:
               foo: task:octets.tester.foo
         /*:
-          io:output: true
           GET:
             octets:get:
               meta: true
@@ -488,7 +507,7 @@ Feature: Octets storage workflows
 
       --cut
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
 
       --cut
 
