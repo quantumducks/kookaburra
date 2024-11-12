@@ -97,7 +97,7 @@ export class Put extends Directive {
     const location: Location = {
       storage,
       authority: input.authority,
-      path: input.request.url
+      path: this.location ?? input.request.url
     }
 
     this.workflow!.execute(location, entry, parameters).pipe(stream)
