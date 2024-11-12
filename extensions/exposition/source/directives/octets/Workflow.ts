@@ -2,7 +2,7 @@ import { NotFound } from '../../HTTP'
 import * as schemas from './schemas'
 import { Workflow } from './workflows'
 import { Directive } from './Directive'
-import type { Unit } from './workflows'
+import type { Unit, Location } from './workflows'
 import type { Input } from './types'
 import type { Component } from '@toa.io/core'
 import type { Output } from '../../io'
@@ -40,9 +40,15 @@ export class WorkflowDirective extends Directive {
     if (entry instanceof Error)
       throw new NotFound()
 
+    const location: Location = {
+      storage,
+      authority: input.authority,
+      path: input.request.url
+    }
+
     return {
       status: 202,
-      body: this.workflow.execute(input, storage, entry, parameters)
+      body: this.workflow.execute(location, entry, parameters)
     }
   }
 }

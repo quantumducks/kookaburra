@@ -41,3 +41,43 @@ Feature: Octets location
       | location  |
       | ./bar     |
       | /foo/bar/ |
+
+  Scenario: Executing a workflow with specified location
+    Given the `octets.tester` is running
+    And the annotation:
+      """yaml
+      /:
+        auth:anonymous: true
+        octets:context: octets
+        POST:
+          octets:put:
+            location: /hello/world/
+            workflow:
+              echo: octets.tester.echo
+          io:output: true
+      """
+    When the stream of `lenna.ascii` is received with the following headers:
+      """
+      POST / HTTP/1.1
+      host: nex.toa.io
+      accept: application/yaml, multipart/yaml
+      content-type: application/octet-stream
+      """
+    Then the following reply is sent:
+      """
+      201 Created
+      content-type: multipart/yaml; boundary=cut
+
+      --cut
+
+      id: ${{ id }}
+      type: application/octet-stream
+      size: 8169
+      --cut
+
+      step: echo
+      status: completed
+      output:
+        path: /hello/world/${{ id }}
+      --cut--
+      """

@@ -8,7 +8,7 @@ import { Directive } from './Directive'
 import { toBytes } from './bytes'
 import type { Readable } from 'stream'
 import type { Parameter } from '../../RTD'
-import type { Unit } from './workflows'
+import type { Unit, Location } from './workflows'
 import type { Entry } from '@toa.io/extensions.storages'
 import type { Remotes } from '../../Remotes'
 import type { Err } from 'error-value'
@@ -94,7 +94,13 @@ export class Put extends Directive {
 
     stream.push(entry)
 
-    this.workflow!.execute(input, storage, entry, parameters).pipe(stream)
+    const location: Location = {
+      storage,
+      authority: input.authority,
+      path: this.location ?? input.request.url
+    }
+
+    this.workflow!.execute(location, entry, parameters).pipe(stream)
 
     return stream
   }

@@ -4,7 +4,7 @@ import * as schemas from './schemas'
 import { Workflow } from './workflows'
 import { Directive } from './Directive'
 import type { Parameter } from '../../RTD'
-import type { Unit } from './workflows'
+import type { Unit, Location } from './workflows'
 import type { Maybe } from '@toa.io/types'
 import type { Component } from '@toa.io/core'
 import type { Output } from '../../io'
@@ -17,7 +17,7 @@ export class Delete extends Directive {
 
   private readonly workflow?: Workflow
   private readonly discovery: Promise<Component>
-  private storage: Component | null = null
+  private storage!: Component
 
   public constructor (options: Options | null, discovery: Promise<Component>, remotes: Remotes) {
     super()
@@ -55,8 +55,7 @@ export class Delete extends Directive {
   }
 
   private async delete (storage: string, input: Input): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await this.storage!.invoke('delete',
+    await this.storage.invoke('delete',
       {
         input: {
           storage,
@@ -68,8 +67,13 @@ export class Delete extends Directive {
   // eslint-disable-next-line max-params
   private async * execute
   (input: Input, storage: string, entry: Entry, parameters: Parameter[]): AsyncGenerator {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    for await (const chunk of this.workflow!.execute(input, storage, entry, parameters)) {
+    const location: Location = {
+      storage,
+      authority: input.authority,
+      path: input.request.url
+    }
+
+    for await (const chunk of this.workflow!.execute(location, entry, parameters)) {
       yield chunk
 
       if (typeof chunk === 'object' && chunk !== null && 'error' in chunk)

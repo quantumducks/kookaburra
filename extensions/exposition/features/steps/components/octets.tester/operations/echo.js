@@ -1,7 +1,7 @@
 'use strict'
 
 function echo (input) {
-  return input.entry.id
+  return input
 }
 
 exports.computation = echo
