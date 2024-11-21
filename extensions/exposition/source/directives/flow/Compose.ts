@@ -7,10 +7,10 @@ import type { Input as Context } from '../../io'
 import type { OutgoingMessage } from '../../HTTP'
 
 export class Compose implements Directive {
-  private readonly expression: Expression
+  private readonly expressions: Expression[]
 
   public constructor (composition: any) {
-    this.expression = compile(composition as object)
+    this.expressions = build(composition)
   }
 
   public attach (context: Context): void {
@@ -28,7 +28,7 @@ export class Compose implements Directive {
 
       const $ = await this.compose(message.body)
 
-      message.body = this.expression($)
+      message.body = this.execute($)
     })
   }
 
@@ -41,11 +41,35 @@ export class Compose implements Directive {
 
     return $
   }
+
+  private execute ($: unknown[]): unknown {
+    let exception: Error | undefined
+
+    for (const expression of this.expressions)
+      try {
+        return expression($)
+      } catch (e: unknown) {
+        exception = e as Error
+        console.debug('Chunks composition failed', { cause: exception.message })
+      }
+
+    throw exception!
+  }
 }
 
-function compile (composition: object): Expression {
+function build (composition: any): Expression[] {
+  return Array.isArray(composition)
+    ? composition.map((variant) => compile(variant))
+    : [compile(composition)]
+}
+
+function compile (composition: object | string): Expression {
+  const text = typeof composition === 'string'
+    ? `return ${composition}`
+    : `return ${json(composition)}`
+
   // eslint-disable-next-line @typescript-eslint/no-implied-eval,no-new-func
-  return new Function('$', `return ${json(composition)}`) as Expression
+  return new Function('$', text) as Expression
 }
 
 function json (node: object | string): string {
