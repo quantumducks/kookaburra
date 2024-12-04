@@ -38,9 +38,3 @@ it('should emit', async () => {
 
   expect(fixtures.emitter.emit).toHaveBeenCalledWith(fixtures.entity.event.mock.results[0].value)
 })
-
-it('should not emit if state has not been changed', async () => {
-  await state.commit(fixtures.unchanged)
-
-  expect(fixtures.emitter.emit).not.toHaveBeenCalled()
-})

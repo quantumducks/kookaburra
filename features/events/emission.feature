@@ -1,14 +1,14 @@
-Feature: Sync event
+Feature: Events emission
 
   Background:
     Given the `mongo.one` database contains:
       | _id                              | foo | bar   | _version |
-      | 72cf9b0ab0ac4ab2b8036e4e940ddcae | 0   | hello | 1        |
+      | ff0431dac0e14fce95c4496c21086781 | 0   | hello | 1        |
     And the `mongo.receiver` database contains:
       | _id                              | count | _version |
-      | 72cf9b0ab0ac4ab2b8036e4e940ddcae | 0     | 1        |
+      | ff0431dac0e14fce95c4496c21086781 | 0     | 1        |
 
-  Scenario: Receiving sync events
+  Scenario: Events emitted if no changes
     Given I compose components:
       | mongo.one      |
       | mongo.receiver |
@@ -18,15 +18,21 @@ Feature: Sync event
         foo: 1
         bar: world
       query:
-        id: 72cf9b0ab0ac4ab2b8036e4e940ddcae
+        id: ff0431dac0e14fce95c4496c21086781
       """
-    And I wait 0.1 second
+    When I call `mongo.one.nothing` with:
+      """yaml
+      query:
+        id: ff0431dac0e14fce95c4496c21086781
+      """
+    Then the reply is received
+    And I wait 0.2 second
     And I call `mongo.receiver.observe` with:
       """yaml
       query:
-        id: 72cf9b0ab0ac4ab2b8036e4e940ddcae
+        id: ff0431dac0e14fce95c4496c21086781
       """
     Then the reply is received:
       """yaml
-      count: 1
+      count: 2
       """
