@@ -5,6 +5,7 @@ entity:
     sender*: string(32)
     recipient*: string(32)
     text*: string
+    watchers: [string(32)]
 
 operations:
   create:
@@ -14,3 +15,4 @@ operations:
       sender*: .
       recipient*: .
       text*: .
+      watchers: .

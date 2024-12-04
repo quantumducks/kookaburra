@@ -29,6 +29,7 @@ export class Realtime extends Connector {
 
   private push (event: Event): void {
     void this.streams?.invoke('push', { input: event })
+      .catch((error) => console.error('Realtime push failed', error))
   }
 }
 
