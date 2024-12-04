@@ -17,7 +17,7 @@ If stream is idle for 16 seconds, a `heartbeat` message is sent.
 ## Static routes
 
 Static route specifies an event that should be combined into a stream using specified property of
-event's payload as a stream key.
+event's payload as a stream key or an array of stream keys.
 
 Static routes may be defined in Component manifest or the Context annotation.
 
