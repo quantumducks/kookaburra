@@ -55,13 +55,13 @@ Feature: Octets directive family
       201 Created
       content-type: application/yaml
 
-      id: 10cf16b458f759e0d617f2f3d83599ff
+      id: ${{ id }}
       type: application/octet-stream
       size: 8169
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      GET /${{ id }} HTTP/1.1
       host: nex.toa.io
       """
     Then the stream equals to `lenna.ascii` is sent with the following headers:
@@ -73,7 +73,7 @@ Feature: Octets directive family
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      GET /${{ id }} HTTP/1.1
       host: nex.toa.io
       if-none-match: ${{ ETAG }}
       """
@@ -83,7 +83,7 @@ Feature: Octets directive family
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff?foo=bar HTTP/1.1
+      GET /${{ id }}?foo=bar HTTP/1.1
       host: nex.toa.io
       """
     Then the following reply is sent:
@@ -92,7 +92,7 @@ Feature: Octets directive family
       """
     When the following request is received:
       """
-      DELETE /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      DELETE /${{ id }} HTTP/1.1
       host: nex.toa.io
       """
     Then the following reply is sent:
@@ -101,7 +101,7 @@ Feature: Octets directive family
       """
     When the following request is received:
       """
-      GET /10cf16b458f759e0d617f2f3d83599ff HTTP/1.1
+      GET /${{ id }} HTTP/1.1
       host: nex.toa.io
       """
     Then the following reply is sent:
