@@ -260,9 +260,8 @@ Then('the reply is received',
    * @this {toa.features.Context}
    */
   function() {
-    if (this.exception !== undefined) {
+    if (this.exception !== undefined)
       throw this.exception
-    }
 
     assert.notStrictEqual(this.reply, undefined, 'Reply is not received')
   })

@@ -1,6 +1,5 @@
 'use strict'
 
-const { empty } = require('@toa.io/generic')
 const { StatePreconditionException, StateNotFoundException } = require('./exceptions')
 
 class State {
@@ -78,18 +77,14 @@ class State {
   }
 
   async commit (state, input) {
-    const event = state.event(input)
+    const object = state.get()
+    const ok = await this.storage.store(object)
 
-    let ok = true
+    // #20
+    if (ok === true) {
+      const event = state.event(input)
 
-    if (!empty(event.changeset)) {
-      const object = state.get()
-
-      ok = await this.storage.store(object)
-
-      // #20
-      if (ok === true)
-        await this.#emission.emit(event)
+      await this.#emission.emit(event)
     }
 
     return ok

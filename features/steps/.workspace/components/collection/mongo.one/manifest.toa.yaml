@@ -22,3 +22,5 @@ operations:
       foo: .
       bar: .
       baz: .
+  nothing:
+    concurrency: retry
