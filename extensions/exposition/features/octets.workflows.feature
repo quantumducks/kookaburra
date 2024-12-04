@@ -325,6 +325,47 @@ Feature: Octets storage workflows
       --cut--
       """
 
+  Scenario: Passing identity to the workflow
+    Given the `octets.tester` is running
+    And the annotation:
+      """yaml
+      /:
+        /:a/:b:
+          auth:anyone: true
+          octets:context: octets
+          POST:
+            octets:put:
+              workflow:
+                identity: octets.tester.identity
+            io:output: true
+      """
+    And transient identity
+    When the stream of `lenna.ascii` is received with the following headers:
+      """
+      POST /hello/world/ HTTP/1.1
+      host: nex.toa.io
+      authorization: Token ${{ identity.token }}
+      accept: application/yaml, multipart/yaml
+      content-type: application/octet-stream
+      """
+    Then the following reply is sent:
+      """
+      201 Created
+      content-type: multipart/yaml; boundary=cut
+
+      --cut
+
+      id: ${{ id }}
+      type: application/octet-stream
+      size: 8169
+      --cut
+
+      step: identity
+      status: completed
+      output: ${{ identity.id }}
+      --cut--
+      """
+
   Scenario: Executing a workflow with `octets:workflow`
     Given the `octets.tester` is running
     And the annotation:

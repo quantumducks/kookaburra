@@ -97,6 +97,7 @@ export class Put extends Directive {
     const location: Location = {
       storage,
       authority: input.authority,
+      identity: input.identity?.id,
       path: this.location ?? input.request.url
     }
 

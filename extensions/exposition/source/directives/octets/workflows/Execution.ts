@@ -114,6 +114,7 @@ export class Execution extends Readable {
 
 export interface Context {
   authority: string
+  identity?: string
   storage: string
   path: string
   entry: Entry
