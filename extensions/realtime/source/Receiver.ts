@@ -1,5 +1,5 @@
-import { Connector, type Message } from '@toa.io/core'
 import { console } from 'openspan'
+import { Connector, type Message } from '@toa.io/core'
 import type { Readable } from 'node:stream'
 
 export class Receiver extends Connector {
@@ -21,12 +21,17 @@ export class Receiver extends Connector {
 
       if (key === undefined) {
         console.error('Event does not contain the expected property',
-          { event: this.event, property })
+          { property, event: this.event })
 
         return
       }
 
-      this.stream.push({ key, event: this.event, data: message.payload })
+      if (Array.isArray(key))
+        // eslint-disable-next-line max-depth
+        for (const k of key)
+          this.stream.push({ key: k, event: this.event, data: message.payload })
+      else
+        this.stream.push({ key, event: this.event, data: message.payload })
     }
   }
 }
