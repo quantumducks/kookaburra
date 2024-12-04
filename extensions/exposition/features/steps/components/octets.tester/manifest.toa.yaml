@@ -7,6 +7,7 @@ operations:
   foo: &operation
     input:
       authority*: string
+      identity: string
       storage*: string
       path*: string
       entry*: object
@@ -20,6 +21,7 @@ operations:
   yield: *operation
   yex: *operation
   authority: *operation
+  identity: *operation
   redirect:
     input:
       authority*: string

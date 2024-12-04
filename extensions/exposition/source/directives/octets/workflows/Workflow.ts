@@ -26,6 +26,7 @@ export class Workflow {
 
     const context: Context = {
       authority: location.authority,
+      identity: location.identity,
       storage: location.storage,
       path: posix.join(location.path, entry.id),
       entry,
@@ -37,8 +38,9 @@ export class Workflow {
 }
 
 export interface Location {
-  storage: string
   authority: string
+  identity?: string
+  storage: string
   path: string
 }
 

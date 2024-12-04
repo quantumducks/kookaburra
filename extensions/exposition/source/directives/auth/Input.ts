@@ -63,7 +63,7 @@ class Statement {
   }
 }
 
-interface Declaration {
+export interface Declaration {
   [key: Exclude<string, 'prop'>]: unknown
 
   prop: string | string[]
