@@ -12,8 +12,8 @@ export class Language extends Mapping<string> {
 
   public constructor (property: string) {
     assert.ok(typeof property === 'string', '`map:language` must be a string')
-    cors.allow('accept-language')
 
+    cors.allow('accept-language')
     super(property)
   }
 
