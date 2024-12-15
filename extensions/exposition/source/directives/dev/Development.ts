@@ -1,5 +1,6 @@
 import { Stub } from './Stub'
 import { Throw } from './Throw'
+import { Sleep } from './Sleep'
 import { type Directive } from './types'
 import type { Input, Output } from '../../io'
 import type { DirectiveFamily } from '../../RTD'
@@ -17,9 +18,9 @@ export class Development implements DirectiveFamily<Directive> {
     return new Class(value)
   }
 
-  public preflight (directives: Directive[], input: Input): Output {
+  public async preflight (directives: Directive[], input: Input): Promise<Output> {
     for (const directive of directives) {
-      const output = directive.apply(input)
+      const output = await directive.apply(input)
 
       if (output !== null)
         return output
@@ -31,5 +32,6 @@ export class Development implements DirectiveFamily<Directive> {
 
 const constructors: Record<string, new (value: any) => Directive> = {
   stub: Stub,
-  throw: Throw
+  throw: Throw,
+  sleep: Sleep
 }

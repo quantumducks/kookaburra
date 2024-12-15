@@ -70,7 +70,7 @@ export class Agent {
     return await meros(response)
   }
 
-  public async abort (): Promise<void> {
+  public abort (): void {
     for (const response of this.pending)
       response.destroy()
 
