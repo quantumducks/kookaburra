@@ -19,14 +19,17 @@ export class Development implements DirectiveFamily<Directive> {
   }
 
   public async preflight (directives: Directive[], input: Input): Promise<Output> {
-    for (const directive of directives) {
-      const output = await directive.apply(input)
+    let output = null
 
-      if (output !== null)
-        return output
+    for (const directive of directives) {
+      const out = await directive.apply(input)
+
+      if (out !== null)
+        if (output !== null) throw new Error('`dev` directives ambiguous output')
+        else output = out
     }
 
-    return null
+    return output
   }
 }
 
