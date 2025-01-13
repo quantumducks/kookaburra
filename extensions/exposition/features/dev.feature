@@ -12,7 +12,6 @@ Feature: Dev
         /nested:
           GET:
             dev:stub: world
-
       """
     # CORS permission
     When the following request is received:

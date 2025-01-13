@@ -4,7 +4,8 @@ import type { HTTPRequest } from './parse/request'
 
 const pools = new Map<string, undici.Pool>()
 
-export async function request (http: string, base?: string): Promise<undici.Dispatcher.ResponseData> {
+export async function request (http: string, options: Options = {}): Promise<undici.Dispatcher.ResponseData> {
+  const { base, ...requestOptions } = options
   const { method, headers, body, url } = parse(http, base)
   const { origin, pathname, search } = new URL(url)
 
@@ -17,6 +18,7 @@ export async function request (http: string, base?: string): Promise<undici.Disp
   const pool = pools.get(origin)!
 
   return await pool.request({
+    ...requestOptions,
     path: pathname + search,
     method,
     headers,
@@ -33,3 +35,5 @@ export function parse (http: string, origin?: string): HTTPRequest {
 
   return { method, headers, body, url: href }
 }
+
+type Options = Partial<undici.Dispatcher.RequestOptions> & { base?: string }

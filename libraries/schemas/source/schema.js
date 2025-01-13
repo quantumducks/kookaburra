@@ -5,6 +5,7 @@ const { defined } = require('@toa.io/generic')
 const { file } = require('@toa.io/filesystem')
 const yaml = require('@toa.io/yaml')
 const { create, is, ajv } = require('./validator')
+const { debug } = require('node:util')
 const betterAjvErrors = require('better-ajv-errors').default
 
 class Schema {
