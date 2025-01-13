@@ -29,10 +29,10 @@ export class Agent {
     this.captures = captures
   }
 
-  public async fetch (input: string): Promise<undici.Dispatcher.ResponseData> {
+  public async fetch (input: string, options: Partial<undici.Dispatcher.RequestOptions> = {}): Promise<undici.Dispatcher.ResponseData> {
     const message = this.normalize(input)
 
-    return await request(message, this.origin)
+    return await request(message, { ...options, base: this.origin })
   }
 
   public async request (input: string): Promise<any> {

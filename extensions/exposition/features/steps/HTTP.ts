@@ -61,12 +61,35 @@ export class HTTP extends http.Agent {
 
     await super.streamMatch(head, stream)
   }
+
+  @when('the following request is interrupted after {float} second(s):')
+  public async interrupt (delay: number, input: string): Promise<any> {
+    const controller = new AbortController()
+
+    await this.gateway.start()
+
+    setTimeout(() => {
+      if (pending)
+        controller.abort()
+      else
+        console.error('Request cannot be interrupted as it is already completed')
+    }, delay * 1000)
+
+    let pending = true
+
+    await super.fetch(input, { signal: controller.signal }).catch((e) => {
+      if (e.name !== 'AbortError')
+        throw e
+    })
+
+    pending = false
+  }
 }
 
-const FILEDIR = path.resolve(__dirname, '../../../storages/source/test')
+const FILES_DIR = path.resolve(__dirname, '../../../storages/source/test')
 
 function open (filename: string): Readable {
-  return fs.createReadStream(path.join(FILEDIR, filename))
+  return fs.createReadStream(path.join(FILES_DIR, filename))
 }
 
 const encoders: Record<string, (buf: Buffer | Uint8Array) => any> = {

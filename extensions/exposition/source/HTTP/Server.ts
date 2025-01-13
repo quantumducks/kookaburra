@@ -1,3 +1,4 @@
+import assert from 'node:assert'
 import fs from 'node:fs'
 import os from 'node:os'
 import * as http from 'node:http'
@@ -14,7 +15,7 @@ export class Server extends Connector {
   private readonly server: http.Server = http.createServer()
   private readonly properties: Properties
   private readonly authorities: Record<string, string>
-  private process?: Processing
+  private process?: Processor
   private ready: boolean = false
   private startedAt: number = 0
 
@@ -32,12 +33,12 @@ export class Server extends Connector {
   }
 
   public static create (options: Options): Server {
-    const properties: Properties = Object.assign({}, DEFAULTS, options)
+    const properties: Properties = { ...DEFAULTS, ...options }
 
     return new Server(properties)
   }
 
-  public attach (process: Processing): void {
+  public attach (process: Processor): void {
     this.process = process
   }
 
@@ -68,6 +69,19 @@ export class Server extends Connector {
   }
 
   private listener (request: http.IncomingMessage, response: http.ServerResponse): void {
+    const invalid = validate(request)
+
+    if (invalid !== null) {
+      console.warn('Invalid request', errorAttributes(request, invalid))
+
+      response.writeHead(400).end()
+
+      return
+    }
+
+    request.on('error', (error) => console.warn('Request error', errorAttributes(request, error)))
+    response.on('error', (error) => console.warn('Response error', errorAttributes(request, error)))
+
     if (request.method === undefined || !this.properties.methods.has(request.method)) {
       response.writeHead(501).end()
 
@@ -86,11 +100,13 @@ export class Server extends Connector {
       return
     }
 
+    assert(this.process !== undefined, 'Request processor is not attached')
+
     const host = request.headers.host!
     const authority = this.authorities[host] ?? host
     const context = new Context(authority, request as IncomingMessage, this.properties)
 
-    this.process!(context)
+    this.process(context)
       .then(this.success(context, response))
       .catch(this.fail(context, response))
   }
@@ -136,6 +152,16 @@ export class Server extends Connector {
   }
 }
 
+function validate (request: http.IncomingMessage): null | Error {
+  try {
+    void new URL(request.url!, `https://${request.headers.host}`)
+
+    return null
+  } catch (error) {
+    return error as Error
+  }
+}
+
 // https://github.com/whatwg/fetch/issues/1254
 async function adam (request: http.IncomingMessage): Promise<void> {
   const devnull = fs.createWriteStream(os.devNull)
@@ -143,6 +169,22 @@ async function adam (request: http.IncomingMessage): Promise<void> {
   request.pipe(devnull)
 
   await once(request, 'end')
+}
+
+function errorAttributes (request: http.IncomingMessage, error: Error & any): RequestErrorAttributes {
+  const attributes: RequestErrorAttributes = {
+    path: request.url!,
+    method: request.method!,
+    name: error.name
+  }
+
+  if (typeof error.code === 'string')
+    attributes.code = error.code
+
+  if (typeof error.stack === 'string')
+    attributes.stack = error.stack
+
+  return attributes
 }
 
 export const PORT = 8000
@@ -169,4 +211,12 @@ export type Options = { authorities: Properties['authorities'] } & {
   [K in Exclude<keyof Properties, 'authorities'>]?: Properties[K]
 }
 
-export type Processing = (input: Context) => Promise<OutgoingMessage>
+export type Processor = (input: Context) => Promise<OutgoingMessage>
+
+interface RequestErrorAttributes {
+  path: string
+  method: string
+  name: string
+  code?: string
+  stack?: string
+}
