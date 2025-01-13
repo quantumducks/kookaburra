@@ -16,9 +16,14 @@ export async function write
     await transform(message)
 
   response.setHeader('server', server)
-
   message.headers?.forEach((value, key) => response.setHeader(key, value))
   context.timing.append(response)
+
+  if (context.request.destroyed) {
+    console.warn('Request destroyed prematurely', { path: context.url.pathname })
+
+    return
+  }
 
   if (message.body instanceof Readable)
     stream(message, context, response)
