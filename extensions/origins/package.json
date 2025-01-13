@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.origins",
-  "version": "1.0.0-alpha.116",
+  "version": "1.0.0-alpha.120",
   "description": "Toa Origins",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -20,8 +20,8 @@
     "@google-cloud/pubsub": "4.3.3",
     "@toa.io/core": "1.0.0-alpha.116",
     "@toa.io/generic": "1.0.0-alpha.93",
-    "@toa.io/pointer": "1.0.0-alpha.93",
-    "@toa.io/schemas": "1.0.0-alpha.93",
+    "@toa.io/pointer": "1.0.0-alpha.120",
+    "@toa.io/schemas": "1.0.0-alpha.120",
     "comq": "0.12.0",
     "msgpackr": "1.10.1",
     "openspan": "1.0.0-alpha.93"

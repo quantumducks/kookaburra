@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/storages.sql",
-  "version": "1.0.0-alpha.93",
+  "version": "1.0.0-alpha.120",
   "description": "Toa SQL Storage Connector",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@toa.io/generic": "1.0.0-alpha.93",
-    "@toa.io/pointer": "1.0.0-alpha.93",
+    "@toa.io/pointer": "1.0.0-alpha.120",
     "knex": "2.4.2",
     "openspan": "1.0.0-alpha.93",
     "pg": "8.9.0"

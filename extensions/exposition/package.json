@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.exposition",
-  "version": "1.0.0-alpha.119",
+  "version": "1.0.0-alpha.120",
   "description": "Toa Exposition",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -20,7 +20,7 @@
     "@isaacs/ttlcache": "1.4.1",
     "@toa.io/core": "1.0.0-alpha.116",
     "@toa.io/generic": "1.0.0-alpha.93",
-    "@toa.io/schemas": "1.0.0-alpha.93",
+    "@toa.io/schemas": "1.0.0-alpha.120",
     "bcryptjs": "2.4.3",
     "error-value": "0.4.1",
     "http-cache-semantics": "4.1.1",
@@ -53,8 +53,8 @@
     "features:octets": "cucumber-js features/octets.*"
   },
   "devDependencies": {
-    "@toa.io/agent": "1.0.0-alpha.118",
-    "@toa.io/extensions.storages": "1.0.0-alpha.113",
+    "@toa.io/agent": "1.0.0-alpha.120",
+    "@toa.io/extensions.storages": "1.0.0-alpha.120",
     "@types/bcryptjs": "2.4.3",
     "@types/cors": "2.8.13",
     "@types/http-cache-semantics": "4.0.4",
