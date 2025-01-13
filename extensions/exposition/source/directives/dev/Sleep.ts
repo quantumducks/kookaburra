@@ -7,11 +7,16 @@ import type { Directive } from './types'
 import type { Input, Output } from '../../io'
 
 export class Sleep implements Directive {
+  private static warned = false
   private readonly maximum: number
 
   public constructor (value: number) {
     assert.ok(Number.isInteger(value), '`dev:sleep` directive value must be an integer')
-    console.warn(`Sleep directive is enabled (maximum: ${value}ms)`)
+
+    if (!Sleep.warned) {
+      console.warn(`Sleep directive is enabled (maximum: ${value}ms)`)
+      Sleep.warned = true
+    }
 
     cors.allow('sleep')
     this.maximum = value

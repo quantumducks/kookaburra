@@ -109,6 +109,10 @@ export class Server extends Connector {
     this.process(context)
       .then(this.success(context, response))
       .catch(this.fail(context, response))
+      .finally(() => {
+        request.removeAllListeners('error')
+        response.removeAllListeners('error')
+      })
   }
 
   private success (context: Context, response: http.ServerResponse) {

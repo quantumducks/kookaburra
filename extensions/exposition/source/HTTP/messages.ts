@@ -19,7 +19,7 @@ export async function write
   message.headers?.forEach((value, key) => response.setHeader(key, value))
   context.timing.append(response)
 
-  if (context.request.destroyed) {
+  if (response.destroyed) {
     console.warn('Request destroyed prematurely', { path: context.url.pathname })
 
     return
