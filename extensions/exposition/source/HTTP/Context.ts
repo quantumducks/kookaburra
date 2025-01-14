@@ -27,9 +27,7 @@ export class Context {
     this.url = new URL(request.url, `https://${request.headers.host}`)
     this.timing = new Timing(properties.trace)
     this.debug = properties.debug
-
-    if (this.debug)
-      this.log(request)
+    this.log(request)
 
     if (this.request.headers.accept !== undefined) {
       const match = SUBTYPE.exec(this.request.headers.accept)

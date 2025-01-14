@@ -21,9 +21,9 @@ const serve = async (argv) => {
 
   const service = factory.service()
 
-  await service.connect()
+  graceful(service)
 
-  return graceful(service)
+  await service.connect()
 }
 
 exports.serve = serve

@@ -20,11 +20,11 @@ async function compose (argv) {
   const paths = find(argv.paths)
   const composition = await boot.composition(paths, argv)
 
+  graceful(composition)
+
   await composition.connect()
 
   if (argv.kill === true) await composition.disconnect()
-
-  return graceful(composition)
 }
 
 /**

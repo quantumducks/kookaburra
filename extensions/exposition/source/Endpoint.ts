@@ -26,13 +26,13 @@ export class Endpoint implements RTD.Endpoint {
 
     this.remote ??= await this.discovery
 
-    if (context.debug)
-      console.debug('Calling operation', {
-        endpoint: this.remote.locator.id + '.' + this.endpoint,
-        request
-      })
+    const endpoint = this.remote.locator.id + '.' + this.endpoint
+
+    console.debug('Calling operation', { endpoint, request })
 
     const reply = await this.remote.invoke(this.endpoint, request)
+
+    console.debug('Received reply', { endpoint, reply })
 
     if (reply instanceof Error)
       throw new http.UnprocessableEntity(reply)
