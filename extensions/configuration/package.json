@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.configuration",
-  "version": "1.0.0-alpha.120",
+  "version": "1.0.0-alpha.123",
   "description": "Toa Configuration",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -25,7 +25,7 @@
   },
   "gitHead": "61c8e74a336385265767e9fd37d49128cb51b17f",
   "dependencies": {
-    "@toa.io/core": "1.0.0-alpha.116",
+    "@toa.io/core": "1.0.0-alpha.123",
     "@toa.io/generic": "1.0.0-alpha.93",
     "@toa.io/schemas": "1.0.0-alpha.120"
   }

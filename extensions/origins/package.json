@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.origins",
-  "version": "1.0.0-alpha.120",
+  "version": "1.0.0-alpha.123",
   "description": "Toa Origins",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -18,7 +18,7 @@
   "types": "transpiled/index.d.ts",
   "dependencies": {
     "@google-cloud/pubsub": "4.3.3",
-    "@toa.io/core": "1.0.0-alpha.116",
+    "@toa.io/core": "1.0.0-alpha.123",
     "@toa.io/generic": "1.0.0-alpha.93",
     "@toa.io/pointer": "1.0.0-alpha.120",
     "@toa.io/schemas": "1.0.0-alpha.120",
