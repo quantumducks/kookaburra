@@ -29,8 +29,10 @@ export class Cache implements DirectiveFamily<Directive> {
     response.headers ??= new Headers()
 
     if (directive === undefined) {
-      if (context.identity !== null && !Control.disabled(response.headers))
+      if (context.identity !== null && !Control.disabled(response.headers)) {
         response.headers.set('cache-control', 'private')
+        response.headers.append('vary', 'authorization')
+      }
     } else
       directive.set(context, response.headers)
   }

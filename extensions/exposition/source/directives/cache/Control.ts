@@ -3,7 +3,7 @@ import type { AuthenticatedContext, Directive } from './types'
 
 export class Control implements Directive {
   protected readonly value: string
-  private cache: string | null = null
+  private control: string | null = null
   private vary: boolean = false
 
   public constructor (value: string) {
@@ -25,14 +25,14 @@ export class Control implements Directive {
     if (!['GET', 'HEAD', 'OPTIONS'].includes(context.request.method))
       return
 
-    this.cache ??= this.resolve(context)
+    this.control ??= this.resolve(context)
 
     if (Control.disabled(headers))
       return
 
-    headers.set('cache-control', this.cache)
+    headers.set('cache-control', this.control)
 
-    if (this.vary !== null)
+    if (this.vary)
       headers.append('vary', 'authorization')
   }
 

@@ -240,6 +240,10 @@ Feature: Caching
           cache:control: max-age=10000
           GET:
             dev:stub: Keep it
+        /sessions/:id:
+          auth:id: id
+          GET:
+            dev:stub: Keep it
       """
     When the following request is received:
       """
@@ -263,5 +267,17 @@ Feature: Caching
       """
       200 OK
       cache-control: private, max-age=10000
+      vary: authorization
+      """
+    When the following request is received:
+      """
+      GET /sessions/efe3a65ebbee47ed95a73edd911ea328/ HTTP/1.1
+      host: nex.toa.io
+      authorization: Token ${{ token }}
+      """
+    Then the following reply is sent:
+      """
+      200 OK
+      cache-control: private
       vary: authorization
       """
