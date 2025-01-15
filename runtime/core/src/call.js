@@ -18,6 +18,8 @@ class Call extends Connector {
   }
 
   async invoke (request = {}) {
+    request.input ??= null
+
     this.#contract.fit(request)
 
     // avoid validation on the recipient's side
