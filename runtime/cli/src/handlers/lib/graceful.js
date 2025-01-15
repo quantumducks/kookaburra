@@ -7,7 +7,9 @@ function graceful (connector) {
     .forEach(signal => process.once(signal, async () => {
       console.info('Shutting down', { signal })
 
-      await connector.disconnect()
+      await connector.disconnect(true)
+
+      process.exit(0)
     }))
 }
 
