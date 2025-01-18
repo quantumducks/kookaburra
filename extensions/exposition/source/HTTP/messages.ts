@@ -45,7 +45,8 @@ export async function read (context: Context): Promise<any> {
 
   try {
     return format.decode(buf)
-  } catch {
+  } catch (error: unknown) {
+    console.debug('Failed to decode message', { path: context.url.pathname, error })
     throw new BadRequest()
   }
 }

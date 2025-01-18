@@ -45,6 +45,19 @@ it('should substitute parts of the words', () => {
     .toEqual([])
 })
 
+it('should substituted padded', () => {
+  captures.set('one', 'one')
+  captures.set('two', 'two')
+
+  const result = captures.substitute(`
+    object:
+      \${{ one }}: ok
+      \${{ two }}: ok
+  `)
+
+  console.log(result)
+})
+
 describe('pipelines', () => {
   it('should generate id', () => {
     const result = captures.substitute('hello #{{ id }}')
