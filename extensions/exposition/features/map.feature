@@ -68,7 +68,7 @@ Feature: HTTP context mapping
       exposition:
         /:
           io:output: true
-          vary:languages: [en, fr]
+          map:languages: [en, fr]
           GET:
             map:language: name
             map:headers:
