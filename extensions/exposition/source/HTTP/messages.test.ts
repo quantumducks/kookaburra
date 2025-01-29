@@ -125,6 +125,7 @@ jest.MockedObject<Context> {
       url,
       headers
     }) as unknown as Context['request'],
+    url: new URL(url, 'https://host.local'),
     timing: new Timing(false)
   }
 

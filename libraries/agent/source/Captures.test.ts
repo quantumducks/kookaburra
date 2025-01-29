@@ -45,7 +45,7 @@ it('should substitute parts of the words', () => {
     .toEqual([])
 })
 
-it('should substituted padded', () => {
+it('should substitute padded', () => {
   captures.set('one', 'one')
   captures.set('two', 'two')
 

@@ -14,11 +14,12 @@ export class Segments extends Mapping<Record<string, string>> {
 
   public override properties (_: unknown, parameters: Parameter[]): Record<string, string> {
     return Object.entries(this.value).reduce((properties: Record<string, string>, [property, parameter]) => {
-      const value = parameters.find(({ name }) => name === parameter)?.value
+      const index = parameters.findIndex(({ name }) => name === parameter)
 
-      assert.ok(value !== undefined, `Route parameter '${parameter}' is missing`)
+      assert.ok(index > -1, `Route parameter '${parameter}' is missing`)
 
-      properties[property] = value
+      properties[property] = parameters[index].value
+      parameters.splice(index, 1)
 
       return properties
     }, {})
