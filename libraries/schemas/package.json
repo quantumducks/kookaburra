@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/schemas",
-  "version": "1.0.0-alpha.120",
+  "version": "1.0.0-alpha.125",
   "description": "Toa Schemas",
   "homepage": "https://toa.io",
   "author": {
@@ -24,7 +24,7 @@
   "main": "source/index.js",
   "types": "types/index.d.ts",
   "dependencies": {
-    "@toa.io/concise": "1.0.0-alpha.93",
+    "@toa.io/concise": "1.0.0-alpha.125",
     "@toa.io/filesystem": "1.0.0-alpha.93",
     "@toa.io/generic": "1.0.0-alpha.93",
     "@toa.io/yaml": "1.0.0-alpha.93",

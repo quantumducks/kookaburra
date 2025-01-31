@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/extensions.storages",
-  "version": "1.0.0-alpha.120",
+  "version": "1.0.0-alpha.125",
   "description": "Toa Storages",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
@@ -31,7 +31,7 @@
     "@aws-sdk/client-s3": "3.633.0",
     "@aws-sdk/lib-storage": "3.633.0",
     "@toa.io/generic": "1.0.0-alpha.93",
-    "@toa.io/schemas": "1.0.0-alpha.120",
+    "@toa.io/schemas": "1.0.0-alpha.125",
     "cloudinary": "2.4.0",
     "error-value": "0.4.1",
     "negotiator": "0.6.3",
