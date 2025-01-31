@@ -1,2 +1,3 @@
 schema: object
 defaults?: object
+...: false

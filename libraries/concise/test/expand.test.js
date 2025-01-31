@@ -52,8 +52,7 @@ it('should expand pattern property oom with empty schema', async () => {
           }
         ]
       }
-    },
-    additionalProperties: false
+    }
   })
 })
 
@@ -67,8 +66,7 @@ it('should not expand $id', async () => {
       foo: {
         type: 'string'
       }
-    },
-    additionalProperties: false
+    }
   }
 
   const output = expand(schema, valid)
@@ -176,8 +174,7 @@ it('should expand array of schemas to enum', async () => {
           foo: {
             type: 'string'
           }
-        },
-        additionalProperties: false
+        }
       },
       {
         type: 'object',
@@ -185,8 +182,7 @@ it('should expand array of schemas to enum', async () => {
           bar: {
             type: 'number'
           }
-        },
-        additionalProperties: false
+        }
       }
     ]
   })
@@ -203,7 +199,6 @@ it('should expand oneOf', async () => {
       '.+': {
         oneOf: [{ type: 'string' }, { type: 'null' }]
       }
-    },
-    additionalProperties: false
+    }
   })
 })

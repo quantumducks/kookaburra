@@ -65,5 +65,4 @@ Feature: Primitive types
         foo:
           type: string
           pattern: "^foo_"
-      additionalProperties: false
       """

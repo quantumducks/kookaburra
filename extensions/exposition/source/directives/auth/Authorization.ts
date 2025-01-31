@@ -13,7 +13,7 @@ import { Scheme } from './Scheme'
 import { Delegate } from './Delegate'
 import { Federation } from './Federation'
 import { Anyone } from './Anyone'
-import { Input } from './Input'
+import { Input, type Declaration } from './Input'
 import { split } from './split'
 import { PRIMARY, PROVIDERS } from './schemes'
 import type { Output } from '../../io'
@@ -54,7 +54,7 @@ export class Authorization implements DirectiveFamily<Directive, Extension> {
     return match(Class,
       Role, () => new Role(value as string | string[], this.discovery.roles),
       Rule, () => new Rule(value as Record<string, string>, this.create.bind(this)),
-      Input, () => new Input(value, this.create.bind(this)),
+      Input, () => new Input(value as Declaration[], this.create.bind(this)),
       Incept, () => new Incept(value as string, this.discovery),
       Delegate, () => new Delegate(value as string, this.discovery.roles),
       () => new Class(value))

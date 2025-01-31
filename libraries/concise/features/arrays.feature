@@ -15,7 +15,6 @@ Feature: Arrays
             - 1
             - 2
             - 3
-      additionalProperties: false
       """
 
   Scenario: One of string constants
@@ -32,7 +31,6 @@ Feature: Arrays
           enum:
             - bar
             - baz
-      additionalProperties: false
       """
 
   Scenario Outline: Array of <type> primitives
@@ -48,7 +46,6 @@ Feature: Arrays
             type: array
             items:
               type: <type>
-      additionalProperties: false
         """
     Examples:
       | type    |
@@ -77,8 +74,6 @@ Feature: Arrays
                 type: number
               bar:
                 type: string
-            additionalProperties: false
-      additionalProperties: false
       """
 
   Scenario: Array of concise objects with default values
@@ -103,8 +98,6 @@ Feature: Arrays
               bar:
                 type: number
                 default: 1
-            additionalProperties: false
-      additionalProperties: false
       """
 
   Scenario: One of concise objects
@@ -129,11 +122,8 @@ Feature: Arrays
                 bar:
                   type: number
                   default: 1
-              additionalProperties: false
             - type: object
               properties:
                 baz:
                   type: number
-              additionalProperties: false
-      additionalProperties: false
       """

@@ -30,5 +30,4 @@ Feature: String formats
       type: object
       properties:
         foo: {}
-      additionalProperties: false
       """

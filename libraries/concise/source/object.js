@@ -49,7 +49,6 @@ const object = (schema, validate) => {
   }
 
   schema.type = 'object'
-  schema.additionalProperties = schema.additionalProperties ?? false
 
   schema.properties = remap(schema.properties, (value) => expand(value, validate))
 

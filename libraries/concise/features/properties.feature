@@ -14,7 +14,6 @@ Feature: Object properties
           type: string
         bar:
           type: boolean
-      additionalProperties: false
       """
 
   Scenario: Required properties
@@ -35,7 +34,6 @@ Feature: Object properties
         bar:
           type: string
       required: [foo]
-      additionalProperties: false
       """
 
   Scenario: Optional properties
@@ -58,7 +56,6 @@ Feature: Object properties
         bar:
           type: string
       required: [foo]
-      additionalProperties: false
       """
 
   Scenario: Pattern properties
@@ -72,7 +69,6 @@ Feature: Object properties
       patternProperties:
         "^str_*+$":
           type: string
-      additionalProperties: false
       """
 
   Scenario: Wildcard property
@@ -86,7 +82,6 @@ Feature: Object properties
       patternProperties:
         "^.*$":
           type: number
-      additionalProperties: false
       """
 
   Scenario: Wildcard complex property
@@ -103,7 +98,6 @@ Feature: Object properties
         "^.*$":
           type: string
           format: uri
-      additionalProperties: false
       """
 
   Scenario: Wildcard array property
@@ -120,7 +114,6 @@ Feature: Object properties
           items:
             type: string
             format: uri
-      additionalProperties: false
       """
 
   Scenario: Property as known keyword
@@ -134,7 +127,6 @@ Feature: Object properties
       properties:
         title:
           type: string
-      additionalProperties: false
       """
 
   Scenario Outline: Additional properties: <value>
@@ -173,5 +165,4 @@ Feature: Object properties
         foo:
           type: string
           const: a
-      additionalProperties: false
       """
