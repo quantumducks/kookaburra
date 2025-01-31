@@ -56,7 +56,7 @@ export class Endpoint implements RTD.Endpoint {
 
     // last-modified
     if (typeof reply === 'object' && reply !== null && ('_updated' in reply || '_created' in reply)) {
-      const timestamp = reply._updated ?? reply._created
+      const timestamp: string = reply._updated ?? reply._created
       const date = new Date(timestamp)
 
       message.headers ??= new Headers()

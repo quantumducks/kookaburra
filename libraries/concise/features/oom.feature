@@ -15,7 +15,6 @@ Feature: One or many
             - type: array
               items:
                 type: string
-      additionalProperties: false
       """
 
   Scenario: One or many with default
@@ -36,7 +35,6 @@ Feature: One or many
               items:
                 type: string
                 default: bar
-      additionalProperties: false
       """
 
   Scenario: One or many of object type
@@ -59,7 +57,6 @@ Feature: One or many
                 bar:
                   type: number
               required: [foo]
-              additionalProperties: false
             - type: array
               items:
                 type: object
@@ -69,8 +66,6 @@ Feature: One or many
                   bar:
                     type: number
                 required: [foo]
-                additionalProperties: false
-      additionalProperties: false
       """
 
   Scenario: One or many as a wildcard property
@@ -88,7 +83,6 @@ Feature: One or many
             - type: array
               items:
                 type: string
-      additionalProperties: false
       """
 
   Scenario: One or many as a pattern property
@@ -106,5 +100,4 @@ Feature: One or many
             - type: array
               items:
                 type: string
-      additionalProperties: false
       """

@@ -11,7 +11,6 @@ Feature: Schema references
       properties:
         foo:
           $ref: types/ok
-      additionalProperties: false
       """
 
   Scenario: Schema reference as array items
@@ -27,7 +26,6 @@ Feature: Schema references
           type: array
           items:
             $ref: types/ok
-      additionalProperties: false
       """
 
   Scenario: Self-reference
@@ -46,10 +44,8 @@ Feature: Schema references
           properties:
             bar:
               type: number
-          additionalProperties: false
         baz:
           $ref: '#/properties/foo/properties/bar'
-      additionalProperties: false
       """
 
   Scenario: Root self-refernece
@@ -70,6 +66,4 @@ Feature: Schema references
               type: number
             next:
               $ref: '#/'
-          additionalProperties: false
-      additionalProperties: false
       """

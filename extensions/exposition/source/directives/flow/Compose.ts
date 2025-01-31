@@ -59,8 +59,8 @@ export class Compose implements Directive {
 
 function build (composition: any): Expression[] {
   return Array.isArray(composition)
-    ? composition.map((variant) => compile(variant))
-    : [compile(composition)]
+    ? composition.map((variant) => compile(variant as object | string))
+    : [compile(composition as object | string)]
 }
 
 function compile (composition: object | string): Expression {

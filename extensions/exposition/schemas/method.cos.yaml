@@ -5,4 +5,5 @@ mapping:
   endpoint: string
   query:
     $ref: query
+  ...: false
 directives: [ref:directive]

@@ -31,5 +31,4 @@ Feature: Objects
         name:
           type: string
       nullable: true
-      additionalProperties: false
       """
