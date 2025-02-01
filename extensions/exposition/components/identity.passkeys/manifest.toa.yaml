@@ -1,0 +1,54 @@
+namespace: identity
+name: passkeys
+
+operations:
+  challenge:
+    input:
+      type: object
+      properties:
+        authority:
+          type: string
+        purpose:
+          type: string
+        identity:
+          type: string
+      required:
+        - authority
+        - purpose
+
+exposition:
+  /:identity:
+    auth:id: identity
+    /challenges:
+      POST:
+        map:segments:
+          identity: identity
+        map:authority: authority
+        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams]
+        endpoint: challenge
+
+configuration:
+  schema:
+    type: object
+    properties:
+      timeout:
+        type: integer
+        default: 60000
+      verification:
+        description: authenticatorSelection.userVerification
+        type: string
+        enum: &choice
+          - required
+          - preferred
+          - discouraged
+        default: preferred
+      residence:
+        description: authenticatorSelection.residentKey
+        type: string
+        enum: *choice
+        default: required
+      algorithms:
+        type: array
+        items:
+          type: number
+        default: [-7, -257]
