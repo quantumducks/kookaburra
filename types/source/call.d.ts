@@ -17,4 +17,5 @@ export interface Query {
 
 export type Maybe<T> = T | Error
 export type Call<Output = any, Input = any> = (request: Request<Input>) => Promise<Output>
-export type Observation<Output = any, Input = undefined> = (request: Request<Input>) => Promise<Output | null>
+export type Observation<Output = any, Input = undefined> = (request: Request<Input>) => Promise<Output extends Array<unknown> ? Output : Output | null>
+export type Transition<Output = any, Input = undefined> = (request: Request<Input>) => Promise<Output | null>

@@ -14,7 +14,7 @@ class Entity {
 
     if (typeof argument === 'object') {
       const object = structuredClone(argument)
-      this.set(object)
+      this.#set(object)
       this.#origin = argument
     } else {
       const id = argument === undefined ? newid() : argument
@@ -60,8 +60,10 @@ class Entity {
         value: {}
       })
 
-    if (!('_created' in value))
+    if (!('_created' in value)) {
       value._created = Date.now()
+      value._updated ??= value._created
+    }
 
     if (value._deleted !== null)
       this.deleted = true

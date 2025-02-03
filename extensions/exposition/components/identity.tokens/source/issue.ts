@@ -15,9 +15,11 @@ export class Effect implements Operation {
   }
 
   public async execute (input: Input): Promise<Maybe<Output>> {
-    const expires = input.lifetime === 0
+    const lifetime = input.lifetime ?? this.lifetime
+
+    const expires = lifetime === 0
       ? undefined
-      : new Date(Date.now() + input.lifetime * 1000).getTime()
+      : new Date(Date.now() + lifetime * 1000).getTime()
 
     const key = await this.keys.create({
       input: {
@@ -39,7 +41,7 @@ export class Effect implements Operation {
       roles
     }
 
-    const { authority, lifetime, scopes, permissions } = input
+    const { authority, scopes, permissions } = input
 
     const token = await this.encrypt({
       input: {
@@ -67,8 +69,8 @@ export class Effect implements Operation {
 interface Input {
   authority: string
   identity: string
-  lifetime: number
   label: string
+  lifetime?: number
   scopes?: string[]
   permissions?: Record<string, string[]>
 }
