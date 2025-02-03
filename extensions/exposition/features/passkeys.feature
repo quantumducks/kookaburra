@@ -1,6 +1,6 @@
 Feature: Web Authentication
 
-  Scenario: Create a new challenge to create a new passkey for existing identity
+  Scenario: Create a challenge to add a new passkey to existing identity
     Given the `identity.passkeys` configuration:
       """yaml
       name: Nex
@@ -8,13 +8,10 @@ Feature: Web Authentication
     And transient identity
     When the following request is received:
       """
-      POST /identity/passkeys/${{ identity.id }}/challenges/ HTTP/1.1
+      POST /identity/passkeys/challenges/${{ identity.id }}/ HTTP/1.1
       host: nex.toa.io
       authorization: Token ${{ identity.token }}
       accept: application/yaml
-      content-type: application/yaml
-
-      purpose: create
       """
     Then the following reply is sent:
       """
@@ -22,9 +19,6 @@ Feature: Web Authentication
 
       challenge: ${{ challenge }}
       timeout: 60000
-      authenticatorSelection:
-        userVerification: preferred
-        residentKey: required
       pubKeyCredParams:
         - type: public-key
           alg: -7

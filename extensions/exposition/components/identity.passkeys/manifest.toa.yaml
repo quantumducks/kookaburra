@@ -1,6 +1,48 @@
 namespace: identity
 name: passkeys
 
+entity:
+  schema:
+    type: object
+    properties:
+      authority:
+        type: string
+      identity:
+        type: string
+      kid:
+        type: string
+      aid:
+        description: AAGUID
+        type: string
+      synced:
+        description: credentialBackedUp
+        type: boolean
+      key:
+        description: Base64-encoded Uint8Array
+        type: string
+      counter:
+        type: number
+        minimum: 0
+        default: 0
+      transports:
+        type: array
+        items:
+          type: string
+    required:
+      - authority
+      - identity
+      - kid
+      - aid
+      - synced
+      - key
+      - counter
+      - _created
+  index:
+    identity:
+      authority: asc
+      identity: asc
+      _created: desc
+
 operations:
   challenge:
     input:
@@ -8,47 +50,109 @@ operations:
       properties:
         authority:
           type: string
-        purpose:
-          type: string
         identity:
           type: string
       required:
         - authority
-        - purpose
+  create:
+    query: false
+    input:
+      type: object
+      properties:
+        authority:
+          type: string
+        identity:
+          type: string
+        origin:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        response:
+          type: object
+          properties:
+            id:
+              type: string
+            response:
+              type: object
+              properties:
+                attestationObject:
+                  type: string
+                clientDataJSON:
+                  type: string
+                transports:
+                  type: array
+                  items:
+                    type: string
+                publicKeyAlgorithm:
+                  type: number
+                publicKey:
+                  type: string
+                authenticatorData:
+                  type: string
+              required:
+                - authenticatorData
+                - attestationObject
+                - clientDataJSON
+                - transports
+                - publicKeyAlgorithm
+                - publicKey
+        authenticatorAttachment:
+          type: string
+          nullable: true
+        clientExtensionResults:
+          type: object
+      required:
+        - authority
+        - identity
+        - origin
+        - id
 
 exposition:
-  /:identity:
-    auth:id: identity
-    /challenges:
+  /challenges:
+    /:identity:
+      auth:id: identity
       POST:
+        map:authority: authority
         map:segments:
           identity: identity
-        map:authority: authority
-        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams]
+        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams, excludeCredentials]
         endpoint: challenge
+  /:identity:
+    auth:id: identity
+    POST:
+      map:authority: authority
+      map:segments:
+        identity: identity
+      map:headers:
+        origin: origin
+      io:output: [id, aid, synced, _created, _updated]
+      endpoint: create
+
 
 configuration:
   schema:
     type: object
     properties:
-      timeout:
-        type: integer
-        default: 60000
-      verification:
-        description: authenticatorSelection.userVerification
-        type: string
-        enum: &choice
-          - required
-          - preferred
-          - discouraged
-        default: preferred
-      residence:
-        description: authenticatorSelection.residentKey
-        type: string
-        enum: *choice
-        default: required
       algorithms:
         type: array
         items:
           type: number
         default: [-7, -257]
+      timeout:
+        type: integer
+        default: 60000
+      verification:
+        description: AuthenticatorSelectionCriteria.userVerification
+        type: string
+        enum: &requirement
+          - required
+          - preferred
+          - discouraged
+      residence:
+        description: AuthenticatorSelectionCriteria.residentKey
+        type: string
+        enum: *requirement
+
+stash: ~

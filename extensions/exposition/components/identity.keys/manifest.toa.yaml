@@ -18,6 +18,9 @@ entity:
       - identity
       - key
       - label
+  index:
+    identity:
+      identity: asc
 
 operations:
   create:

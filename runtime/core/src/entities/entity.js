@@ -14,7 +14,7 @@ class Entity {
 
     if (typeof argument === 'object') {
       const object = structuredClone(argument)
-      this.set(object)
+      this.#set(object)
       this.#origin = argument
     } else {
       const id = argument === undefined ? newid() : argument
