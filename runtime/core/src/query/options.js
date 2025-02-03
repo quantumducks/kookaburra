@@ -33,8 +33,9 @@ const projection = (projection, properties) => {
     }
   }
 
-  if (projection.includes('_version') === false)
-    projection.push('_version')
+  for (const property of ['_version', '_created', '_updated', '_deleted'])
+    if (!projection.includes(property))
+      projection.push(property)
 }
 
 exports.options = options

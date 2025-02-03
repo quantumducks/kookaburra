@@ -158,11 +158,11 @@ operations:
 exposition:
   /:
     POST:
-      auth:anonymous: true
+      auth:issue: identity
       map:authority: authority
       map:headers:
         origin: origin
-      io:output: true
+      io:output: [identity]
       endpoint: authenticate
     /challenges:
       POST:

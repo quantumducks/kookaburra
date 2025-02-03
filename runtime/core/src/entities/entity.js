@@ -60,8 +60,10 @@ class Entity {
         value: {}
       })
 
-    if (!('_created' in value))
+    if (!('_created' in value)) {
       value._created = Date.now()
+      value._updated ??= value._created
+    }
 
     if (value._deleted !== null)
       this.deleted = true

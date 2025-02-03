@@ -48,3 +48,5 @@ storages:
   octets:
     provider: tmp
     directory: test
+
+stash: redis://localhost:6379

@@ -5,23 +5,25 @@ import type { Operation } from '@toa.io/types'
 
 export class Effect implements Operation {
   private use!: Context['local']['use']
+  private logs!: Context['logs']
 
   public mount (context: Context): void {
     this.use = context.local.use
+    this.logs = context.logs
   }
 
   public async execute (input: Input): Promise<Output> {
     const { authority, ...response } = input
 
-    const ok = await this.use({
+    const identity = await this.use({
       query: {
         criteria: `authority=="${authority}";kid=="${response.id}"`
       },
       input: response
     })
 
-    if (ok === null) {
-      console.debug('Key not found', {
+    if (identity === null) {
+      this.logs.debug('Passkey not found', {
         authority,
         id: response.id
       })
@@ -29,10 +31,10 @@ export class Effect implements Operation {
       return ERR_MISS
     }
 
-    if (ok instanceof Error)
-      return ok
+    if (identity instanceof Error)
+      return identity
 
-    return ok
+    return { identity }
   }
 }
 
@@ -43,4 +45,4 @@ export interface Input extends Omit<AuthenticationResponseJSON, 'rawId'> {
   origin: string
 }
 
-export type Output = string | Error
+export type Output = { identity: string } | Error
