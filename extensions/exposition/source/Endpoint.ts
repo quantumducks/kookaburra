@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream'
 import { console } from 'openspan'
 import { Mapping } from './Mapping'
 import * as http from './HTTP'
@@ -32,7 +33,7 @@ export class Endpoint implements RTD.Endpoint {
 
     const reply = await this.remote.invoke(this.endpoint, request)
 
-    console.debug('Received reply', { endpoint, reply })
+    console.debug('Received reply', { endpoint, reply: reply instanceof Readable ? '[Readable stream]' : reply })
 
     if (reply instanceof Error)
       throw new http.UnprocessableEntity(reply)

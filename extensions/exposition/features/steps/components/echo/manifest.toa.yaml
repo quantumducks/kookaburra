@@ -21,3 +21,6 @@ operations:
         b:
           type: string
     output: *parameters
+  echo:
+    input:
+      type: object
