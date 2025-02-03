@@ -7,8 +7,9 @@ export class Effect implements Operation {
   private timeout!: number
   private authenticator?: AuthenticatorSelectionCriteria
   private credParams!: PublicKeyCredentialParameters[]
-  private stash!: Context['stash']
   private enumerate!: Context['local']['enumerate']
+  private stash!: Context['stash']
+  private logs!: Context['logs']
 
   public mount (context: Context): void {
     this.timeout = context.configuration.timeout
@@ -24,8 +25,9 @@ export class Effect implements Operation {
       this.authenticator.residentKey = context.configuration.residence
     }
 
-    this.stash = context.stash
     this.enumerate = context.local.enumerate
+    this.stash = context.stash
+    this.logs = context.logs
   }
 
   public async execute (input: Input): Promise<Output> {
@@ -59,6 +61,8 @@ export class Effect implements Operation {
   private async createChallenge (authority: string): Promise<string> {
     const challenge = randomBytes(32).toString('base64url')
     const key = `challenge:${authority}:${challenge}`
+
+    this.logs.debug('Creating challenge', { key })
 
     await this.stash.set(key, 1, 'EX', this.timeout / 1000 * EX_GAP)
 

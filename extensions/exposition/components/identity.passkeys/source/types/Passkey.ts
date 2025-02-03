@@ -1,3 +1,5 @@
+import type { AuthenticatorTransportFuture } from '@simplewebauthn/server'
+
 export interface Passkey {
   id: string
   authority: string
@@ -7,5 +9,5 @@ export interface Passkey {
   synced: boolean
   key: string
   counter: number
-  transports?: string[]
+  transports?: AuthenticatorTransportFuture[]
 }

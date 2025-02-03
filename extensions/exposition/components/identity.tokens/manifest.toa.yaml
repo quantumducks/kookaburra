@@ -81,7 +81,6 @@ operations:
       required:
         - authority
         - identity
-        - lifetime
         - label
     output:
       kid: string

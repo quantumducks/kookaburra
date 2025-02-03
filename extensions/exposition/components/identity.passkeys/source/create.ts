@@ -30,10 +30,10 @@ export class Transition implements Operation {
     }).catch((e) => {
       this.logs.debug('Failed to verify registration response', { message: e.message })
 
-      return ERR_FAILED
+      return ERR_FAILED as Error
     })
 
-    if (verified instanceof Err)
+    if (verified instanceof Error)
       return verified
 
     if (!verified.verified || verified.registrationInfo?.credential === undefined)

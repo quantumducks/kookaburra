@@ -38,10 +38,13 @@ entity:
       - counter
       - _created
   index:
-    identity:
+    list:
       authority: asc
       identity: asc
       _created: desc
+    key:
+      authority: asc
+      kid: asc
 
 operations:
   challenge:
@@ -108,27 +111,83 @@ operations:
         - identity
         - origin
         - id
+  use:
+    concurrency: retry
+    query: true
+    input:
+      type: object
+      properties: &use.input
+        origin:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        response:
+          type: object
+          properties:
+            authenticatorData:
+              type: string
+            clientDataJSON:
+              type: string
+            signature:
+              type: string
+            userHandle:
+              type: string
+        authenticatorAttachment:
+          type: string
+        clientExtensionResults:
+          type: object
+      required:
+        - origin
+        - id
+        - response
+  authenticate:
+    input:
+      type: object
+      properties:
+        authority:
+          type: string
+        <<: *use.input
+      required:
+        - authority
+        - origin
+        - id
+        - response
 
 exposition:
-  /challenges:
+  /:
+    POST:
+      auth:anonymous: true
+      map:authority: authority
+      map:headers:
+        origin: origin
+      io:output: true
+      endpoint: authenticate
+    /challenges:
+      POST:
+        auth:anonymous: true
+        map:authority: authority
+        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams]
+        endpoint: challenge
+      /:identity:
+        auth:id: identity
+        POST:
+          map:authority: authority
+          map:segments:
+            identity: identity
+          io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams, excludeCredentials]
+          endpoint: challenge
     /:identity:
       auth:id: identity
       POST:
         map:authority: authority
         map:segments:
           identity: identity
-        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams, excludeCredentials]
-        endpoint: challenge
-  /:identity:
-    auth:id: identity
-    POST:
-      map:authority: authority
-      map:segments:
-        identity: identity
-      map:headers:
-        origin: origin
-      io:output: [id, aid, synced, _created, _updated]
-      endpoint: create
+        map:headers:
+          origin: origin
+        io:output: [id, aid, synced, _created, _updated]
+        endpoint: create
 
 
 configuration:

@@ -1,14 +1,16 @@
+import type { Observation, Transition } from '@toa.io/types'
 import type { Redis } from 'ioredis'
-import type { Call } from '@toa.io/types'
 import type { Logs } from '@toa.io/extensions.telemetry'
 import type { Configuration } from './Configuration'
 import type { Passkey } from './Passkey'
+import type { Input as UseInput, Output as UseOutput } from '../use'
 
 export interface Context {
   configuration: Configuration
   stash: Redis
   logs: Logs
   local: {
-    enumerate: Call<Passkey[]>
+    enumerate: Observation<Passkey[]>
+    use: Transition<UseOutput, UseInput>
   }
 }
