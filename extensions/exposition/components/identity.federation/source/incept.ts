@@ -1,11 +1,11 @@
 import { assertionsAsValues } from './lib/assertions-as-values.js'
 import { decode } from './lib/jwt'
-import type { Request } from '@toa.io/core'
-import type { Context, Entity } from './types'
+import type { Request } from '@toa.io/types'
+import type { Context, Entity, TransitInput } from './types'
 
 async function incept (input: Input, context: Context): Promise<Output> {
   const { iss, sub } = await decode(input.credentials, context.configuration.trust)
-  const request: Request = { input: { authority: input.authority, iss, sub } satisfies Omit<Entity, 'id'> }
+  const request: Request<TransitInput> = { input: { authority: input.authority, iss, sub } satisfies Omit<Entity, 'id'> }
 
   if (input.id !== undefined)
     request.query = { id: input.id }
@@ -13,13 +13,13 @@ async function incept (input: Input, context: Context): Promise<Output> {
   return await context.local.transit(request)
 }
 
-interface Input {
+export interface Input {
   authority: string
   credentials: string
   id?: string
 }
 
-interface Output {
+export interface Output {
   id: string
 }
 

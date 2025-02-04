@@ -28,6 +28,10 @@ entity:
         type: array
         items:
           type: string
+      label: &label
+        type: string
+        minLength: 1
+        maxLength: 64
     required:
       - authority
       - identity
@@ -68,6 +72,7 @@ operations:
           type: string
         origin:
           type: string
+        label: *label
         id:
           type: string
         type:
@@ -110,7 +115,10 @@ operations:
         - authority
         - identity
         - origin
+        - label
         - id
+        - type
+        - response
   use:
     concurrency: retry
     query: true
@@ -154,6 +162,31 @@ operations:
         - origin
         - id
         - response
+  list:
+    input:
+      type: object
+      properties:
+        authority:
+          type: string
+        identity:
+          type: string
+      required:
+        - authority
+        - identity
+  delete:
+    input:
+      type: object
+      properties:
+        authority:
+          type: string
+        identity:
+          type: string
+        id:
+          type: string
+      required:
+        - authority
+        - identity
+        - id
 
 exposition:
   /:
@@ -186,9 +219,22 @@ exposition:
           identity: identity
         map:headers:
           origin: origin
-        io:output: [id, aid, synced, _created, _updated]
+        io:output: [id, aid, synced, label, _created, _updated]
         endpoint: create
-
+      GET:
+        map:authority: authority
+        map:segments:
+          identity: identity
+        io:output: [id, aid, synced, label, _created, _updated]
+        endpoint: list
+      /:id:
+        DELETE:
+          map:authority: authority
+          map:segments:
+            identity: identity
+            id: id
+          io:output: false
+          endpoint: delete
 
 configuration:
   schema:

@@ -10,4 +10,5 @@ export interface Passkey {
   key: string
   counter: number
   transports?: AuthenticatorTransportFuture[]
+  label?: string
 }
