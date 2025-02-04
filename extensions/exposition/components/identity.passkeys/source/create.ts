@@ -17,7 +17,7 @@ export class Transition implements Operation {
   }
 
   public async execute (input: Input, object: Passkey): Promise<Passkey | Error> {
-    const { authority, identity, ...response } = input
+    const { authority, identity, label, ...response } = input
 
     // rawId is not sent from the client
     response.rawId = response.id
@@ -48,6 +48,7 @@ export class Transition implements Operation {
     object.synced = reg.credentialBackedUp
     object.key = Buffer.from(reg.credential.publicKey).toString('base64url')
     object.transports = reg.credential.transports
+    object.label = label
 
     return object
   }
@@ -66,4 +67,5 @@ export interface Input extends RegistrationResponseJSON {
   authority: string
   origin: string
   identity: string
+  label?: string
 }

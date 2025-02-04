@@ -10,7 +10,8 @@ export interface Context {
   stash: Redis
   logs: Logs
   local: {
-    enumerate: Observation<Passkey[]>
+    enumerate: Observation<Passkey[], never, Passkey>
+    terminate: Transition<void, void, Passkey>
     use: Transition<UseOutput, UseInput>
   }
 }
