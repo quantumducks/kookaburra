@@ -25,7 +25,7 @@ export class Transition implements Operation {
       expectedRPID: new URL(origin).hostname,
       expectedChallenge: async (challenge) => this.verifyChallenge(object.authority, challenge)
     }).catch((e) => {
-      this.logs.debug('Failed to verify registration response', { message: e.message })
+      this.logs.info('Failed to verify authentication response', { message: e.message })
 
       return ERR_FAILED as Error
     })
