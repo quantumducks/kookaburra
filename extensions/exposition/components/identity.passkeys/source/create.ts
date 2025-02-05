@@ -28,7 +28,7 @@ export class Transition implements Operation {
       expectedChallenge: async (challenge) => this.verifyChallenge(authority, challenge),
       supportedAlgorithmIDs: this.algorithms
     }).catch((e) => {
-      this.logs.debug('Failed to verify registration response', { message: e.message })
+      this.logs.info('Failed to verify registration response', { message: e.message })
 
       return ERR_FAILED as Error
     })

@@ -24,12 +24,7 @@ export class Server extends Connector {
 
     this.properties = properties
     this.authorities = Object.fromEntries(Object.entries(properties.authorities).map(([key, value]) => [value, key]))
-
     this.server.on('request', (req, res) => this.listener(req, res))
-
-    if (this.properties.debug)
-      this.server.on('connection', (socket) =>
-        console.debug('Connected', { address: socket.remoteAddress }))
   }
 
   public static create (options: Options): Server {
