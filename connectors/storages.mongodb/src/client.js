@@ -51,6 +51,7 @@ class Client extends Connector {
     super()
 
     this.locator = locator
+    this.name = locator.lowercase
   }
 
   /**
@@ -62,7 +63,6 @@ class Client extends Connector {
     const urls = await this.resolveURLs()
     const dbname = this.resolveDB()
 
-    this.name = this.locator.lowercase
     this.key = getKey(dbname, urls)
 
     INSTANCES[this.key] ??= this.createInstance(urls)
