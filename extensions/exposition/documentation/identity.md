@@ -148,19 +148,15 @@ Identity `2428c31ecb6e4a51a24ef52f0c4181b9` are created.
 
 Token can be issued for a response using the `auth:issue` directive, which specifies the name of the
 response property that contain Identity identifier (string).
-This property will be replaced with the Identity object, and `Authorization` header will be added to
-the response.
 
 Request must not be authenticated.
 
 ```yaml
 /users/:
   POST:
-    auth:issue: identity
+    auth:issue: id
     endpoint: create
 ```
-
-Assuming `create` operation returns an object with the `identity` property:
 
 ```
 POST /users/
@@ -172,9 +168,8 @@ name: User
 201 Created
 authorization: Token v4.local.eyJzdWIiOiJqb2hu...
 
-identity:
-  id: 2428c31ecb6e4a51a24ef52f0c4181b9
-  roles: []
+id: 2428c31ecb6e4a51a24ef52f0c4181b9
+name: User
 ```
 
 ## FAQ
