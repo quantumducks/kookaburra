@@ -119,7 +119,7 @@ exposition:
 The value of the `auth:incept` directive refers to the name of the response property that will be
 returned by the `POST` operation, containing the created entity identifier.
 
-A request with Identity inception must contain (non-existent) credentials that will be associated
+A request with Identity inception may contain (non-existent) credentials that will be associated
 with the created Identity.
 
 ```http
@@ -143,34 +143,6 @@ Identity `2428c31ecb6e4a51a24ef52f0c4181b9` are created.
 
 > `auth:incept` directive may have a `null` value, which means that the Identity will be created
 > without any associated entity.
-
-## Issuing tokens for a response
-
-Token can be issued for a response using the `auth:issue` directive, which specifies the name of the
-response property that contain Identity identifier (string).
-
-Request must not be authenticated.
-
-```yaml
-/users/:
-  POST:
-    auth:issue: id
-    endpoint: create
-```
-
-```
-POST /users/
-
-name: User
-
----
-
-201 Created
-authorization: Token v4.local.eyJzdWIiOiJqb2hu...
-
-id: 2428c31ecb6e4a51a24ef52f0c4181b9
-name: User
-```
 
 ## FAQ
 

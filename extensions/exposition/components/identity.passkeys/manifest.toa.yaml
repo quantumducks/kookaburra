@@ -191,7 +191,7 @@ operations:
 exposition:
   /:
     POST:
-      auth:issue: identity
+      auth:incept: identity
       map:authority: authority
       map:headers:
         origin: origin

@@ -8,7 +8,6 @@ import { Id } from './Id'
 import { Role } from './Role'
 import { Rule } from './Rule'
 import { Incept } from './Incept'
-import { Issue } from './Issue'
 import { Echo } from './Echo'
 import { Scheme } from './Scheme'
 import { Delegate } from './Delegate'
@@ -119,7 +118,7 @@ export class Authorization implements DirectiveFamily<Directive, Extension> {
     const [scheme, credentials] = split(authorization)
     const provider = PROVIDERS[scheme]
 
-    if (!(provider in this.discovery))
+    if (provider === undefined)
       throw new http.Unauthorized(`Unknown authentication scheme '${scheme}'`)
 
     this.schemes[scheme] ??= await this.discovery[provider]
@@ -178,7 +177,6 @@ const constructors: Record<string, new (value: any, argument?: any) => Directive
   role: Role,
   rule: Rule,
   incept: Incept,
-  issue: Issue,
   scheme: Scheme,
   echo: Echo,
   delegate: Delegate,
