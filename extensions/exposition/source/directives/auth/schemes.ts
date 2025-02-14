@@ -6,4 +6,6 @@ export const PROVIDERS: Record<Scheme, Remote> = {
   bearer: 'federation'
 }
 
+export const INCEPTION: Remote[] = ['basic', 'federation']
+
 export const PRIMARY: Scheme = 'token'

@@ -6,7 +6,7 @@ Feature: Issue authentication token for a response
       exposition:
         /:
           POST:
-            auth:issue: identity
+            auth:issue: id
             io:output: true
             query: ~
             endpoint: echo
@@ -19,7 +19,7 @@ Feature: Issue authentication token for a response
       accept: application/yaml
       content-type: application/yaml
 
-      identity: ${{ identity.id }}
+      id: ${{ identity.id }}
       foo: bar
       """
     Then the following reply is sent:
@@ -27,8 +27,6 @@ Feature: Issue authentication token for a response
       201 Created
       authorization: Token ${{ token }}
 
-      identity:
-        id: ${{ identity.id }}
-        roles: []
+      id: ${{ identity.id }}
       foo: bar
       """

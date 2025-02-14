@@ -13,6 +13,8 @@ class Storage extends Connector {
   #collection
   #entity
 
+  #logs
+
   constructor (client, entity) {
     super()
 
@@ -20,6 +22,8 @@ class Storage extends Connector {
     this.#entity = entity
 
     this.depends(client)
+
+    this.#logs = console.fork({ collection: client.name })
   }
 
   get raw () {
@@ -149,7 +153,7 @@ class Storage extends Connector {
     options.upsert = true
     options.returnDocument = ReturnDocument.AFTER
 
-    console.debug('Database query', { method: 'findOneAndUpdate', criteria, update, options })
+    this.#logs.debug('Database query', { method: 'findOneAndUpdate', criteria, update, options })
 
     const result = await this.#collection.findOneAndUpdate(criteria, update, options)
 
@@ -180,7 +184,7 @@ class Storage extends Connector {
         const sparse = this.checkFields(Object.keys(fields))
 
         await this.#collection.createIndex(fields, { name, sparse })
-          .catch((e) => console.warn('Index creation failed', { name, fields, error: e }))
+          .catch((e) => this.#logs.warn('Index creation failed', { name, fields, error: e }))
 
         indexes.push(name)
       }
@@ -198,7 +202,7 @@ class Storage extends Connector {
     name = 'unique_' + name
 
     await this.#collection.createIndex(fields, { name, unique: true, sparse })
-      .catch((e) => console.warn('Unique index creation failed', { name, fields, error: e }))
+      .catch((e) => this.#logs.warn('Unique index creation failed', { name, fields, error: e }))
 
     return name
   }
@@ -208,7 +212,7 @@ class Storage extends Connector {
     const obsolete = current.filter((name) => !desired.includes(name))
 
     if (obsolete.length > 0) {
-      console.info('Removing obsolete indexes', { indexes: obsolete.join(', ') })
+      this.#logs.info('Removing obsolete indexes', { indexes: obsolete.join(', ') })
 
       await Promise.all(obsolete.map((name) => this.#collection.dropIndex(name)))
     }
@@ -236,7 +240,7 @@ class Storage extends Connector {
     }
 
     if (optional.length > 0) {
-      console.info('Index fields are optional, creating sparse index', { fields: optional.join(', ') })
+      this.#logs.info('Index fields are optional, creating sparse index', { fields: optional })
 
       return true
     } else
@@ -244,8 +248,7 @@ class Storage extends Connector {
   }
 
   debug (method, attributes) {
-    console.debug('Database query', {
-      collection: this.#client.name,
+    this.#logs.debug('Database query', {
       method,
       ...attributes
     })
