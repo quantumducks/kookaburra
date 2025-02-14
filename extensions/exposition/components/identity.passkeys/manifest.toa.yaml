@@ -68,9 +68,9 @@ operations:
       properties:
         authority:
           type: string
-        identity:
-          type: string
         origin:
+          type: string
+        identity:
           type: string
         label: *label
         id:
