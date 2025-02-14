@@ -1,6 +1,6 @@
 {
   "name": "@toa.io/storages.mongodb",
-  "version": "1.0.0-alpha.126",
+  "version": "1.0.0-alpha.130",
   "description": "Toa MongoDB Storage Connector",
   "author": "temich <tema.gurtovoy@gmail.com>",
   "homepage": "https://github.com/toa-io/toa#readme",
