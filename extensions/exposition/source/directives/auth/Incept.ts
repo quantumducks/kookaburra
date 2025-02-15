@@ -1,4 +1,5 @@
 import assert from 'node:assert'
+import { console } from 'openspan'
 import * as http from '../../HTTP'
 import { split } from './split'
 import { create } from './create'
@@ -34,6 +35,15 @@ export class Incept implements Directive {
 
   public async settle (context: Context, response: http.OutgoingMessage): Promise<void> {
     const id = response.body?.[this.property ?? 'id']
+
+    if (id === undefined) {
+      console.debug('Inception skipped: response does not contain expected property', {
+        property: this.property,
+        response
+      })
+
+      return
+    }
 
     assert(typeof id === 'string', `Response body property "${this.property}" expected to be a string`)
 
