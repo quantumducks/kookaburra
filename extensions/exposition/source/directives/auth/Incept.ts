@@ -50,7 +50,7 @@ export class Incept implements Directive {
     if (context.request.headers.authorization !== undefined)
       context.identity = await this.incept(context, id)
     else
-      context.identity = { id, scheme: null, refresh: true }
+      context.identity = { id, scheme: null, refresh: true, roles: [] }
   }
 
   private async incept (context: Context, id: string): Promise<Identity> {
@@ -77,6 +77,7 @@ export class Incept implements Directive {
       throw new http.UnprocessableEntity(identity)
 
     identity.scheme = scheme
+    identity.roles = []
 
     return identity
   }
