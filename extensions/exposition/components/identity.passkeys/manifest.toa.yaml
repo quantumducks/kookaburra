@@ -55,11 +55,15 @@ operations:
     input:
       type: object
       properties:
+        type:
+          type: string
+          enum: [creation, request]
         authority:
           type: string
         identity:
           type: string
       required:
+        - type
         - authority
   create:
     query: false
@@ -201,7 +205,8 @@ exposition:
       POST:
         auth:anonymous: true
         map:authority: authority
-        io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams]
+        io:output: &challenge [identity, challenge, timeout, userVerification, authenticatorSelection, pubKeyCredParams, allowCredentials, excludeCredentials]
+        auth:incept: identity
         endpoint: challenge
       /:identity:
         auth:id: identity
@@ -209,7 +214,7 @@ exposition:
           map:authority: authority
           map:segments:
             identity: identity
-          io:output: [challenge, timeout, authenticatorSelection, pubKeyCredParams, excludeCredentials]
+          io:output: *challenge
           endpoint: challenge
     /:identity:
       auth:id: identity

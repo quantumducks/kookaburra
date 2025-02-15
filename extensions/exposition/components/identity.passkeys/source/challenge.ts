@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto'
+import { newid } from '@toa.io/generic'
 import { MAX_KEYS } from './lib/const'
 import type { Operation } from '@toa.io/types'
 import type { Context } from './types'
@@ -31,7 +32,7 @@ export class Effect implements Operation {
   }
 
   public async execute (input: Input): Promise<Output> {
-    const { identity, authority } = input
+    const { type, identity, authority } = input
     const challenge = await this.createChallenge(authority)
 
     const options: Output = {
@@ -39,23 +40,31 @@ export class Effect implements Operation {
       timeout: this.timeout
     }
 
-    if (identity === undefined)
-      return options
+    if (type === 'creation')
+      options.identity = identity ?? newid()
 
-    const keys = await this.enumerate({
-      query: {
-        criteria: `identity==${identity}`,
-        projection: ['kid', 'transports'],
-        limit: MAX_KEYS
-      }
-    })
+    const keys = identity === undefined
+      ? undefined
+      : await this.enumerate({
+        query: {
+          criteria: `identity==${identity}`,
+          projection: ['kid', 'transports'],
+          limit: MAX_KEYS
+        }
+      })
 
-    return {
-      ...options,
-      excludeCredentials: keys.map(({ kid, transports }) => ({ id: kid, transports })),
-      pubKeyCredParams: this.credParams,
-      authenticatorSelection: this.authenticator
-    }
+    if (type === 'creation')
+      return {
+        ...options,
+        excludeCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports })),
+        pubKeyCredParams: this.credParams,
+        authenticatorSelection: this.authenticator
+      } satisfies CreationOptions
+    else
+      return {
+        ...options,
+        allowCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports }))
+      } satisfies RequestOptions
   }
 
   private async createChallenge (authority: string): Promise<string> {
@@ -73,6 +82,7 @@ export class Effect implements Operation {
 const EX_GAP = 1.5
 
 interface Input {
+  type: 'creation' | 'request'
   authority: string
   identity?: string | null
 }
@@ -80,6 +90,7 @@ interface Input {
 type Output = CreationOptions | RequestOptions
 
 interface CommonOptions {
+  identity?: string
   challenge: string
   timeout: number
 }
@@ -91,7 +102,10 @@ interface KeyDescriptor {
 
 type CreationOptions =
   CommonOptions
-  & Omit<PublicKeyCredentialCreationOptions, 'rp' | 'user' | 'excludeCredentials'>
-  & { excludeCredentials: KeyDescriptor[] }
+  & Omit<PublicKeyCredentialCreationOptions, 'challenge' | 'rp' | 'user' | 'excludeCredentials'>
+  & { excludeCredentials?: KeyDescriptor[] }
 
-type RequestOptions = CommonOptions
+type RequestOptions =
+  CommonOptions
+  & Omit<PublicKeyCredentialRequestOptions, 'challenge' | 'allowCredentials'>
+  & { allowCredentials?: KeyDescriptor[] }

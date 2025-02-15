@@ -1,4 +1,5 @@
 import assert from 'node:assert'
+import { console } from 'openspan'
 import * as http from '../../HTTP'
 import { split } from './split'
 import { create } from './create'
@@ -35,12 +36,21 @@ export class Incept implements Directive {
   public async settle (context: Context, response: http.OutgoingMessage): Promise<void> {
     const id = response.body?.[this.property ?? 'id']
 
+    if (id === undefined) {
+      console.debug('Inception skipped: response does not contain expected property', {
+        property: this.property,
+        response
+      })
+
+      return
+    }
+
     assert(typeof id === 'string', `Response body property "${this.property}" expected to be a string`)
 
     if (context.request.headers.authorization !== undefined)
       context.identity = await this.incept(context, id)
     else
-      context.identity = { id, scheme: null, refresh: true }
+      context.identity = { id, scheme: null, refresh: true, roles: [] }
   }
 
   private async incept (context: Context, id: string): Promise<Identity> {
@@ -67,6 +77,7 @@ export class Incept implements Directive {
       throw new http.UnprocessableEntity(identity)
 
     identity.scheme = scheme
+    identity.roles = []
 
     return identity
   }
