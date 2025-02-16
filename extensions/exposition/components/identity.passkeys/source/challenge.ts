@@ -63,7 +63,8 @@ export class Effect implements Operation {
     else
       return {
         ...options,
-        allowCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports }))
+        allowCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports })),
+        userVerification: this.authenticator?.userVerification
       } satisfies RequestOptions
   }
 
