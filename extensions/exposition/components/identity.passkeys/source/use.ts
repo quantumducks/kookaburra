@@ -7,10 +7,14 @@ import type { Context, Passkey } from './types'
 export class Transition implements Operation {
   private stash!: Context['stash']
   private logs!: Context['logs']
+  private verification!: boolean
+  private presence!: boolean
 
   public mount (context: Context): void {
     this.stash = context.stash
     this.logs = context.logs
+    this.verification = context.configuration.verification === 'required'
+    this.presence = context.configuration.residence === 'required'
   }
 
   public async execute (input: Input, object: Passkey): Promise<Output> {
@@ -23,7 +27,8 @@ export class Transition implements Operation {
       credential,
       expectedOrigin: origin,
       expectedRPID: new URL(origin).hostname,
-      expectedChallenge: async (challenge) => this.verifyChallenge(object.authority, challenge)
+      expectedChallenge: async (challenge) => this.verifyChallenge(object.authority, challenge),
+      requireUserVerification: this.verification
     }).catch((e) => {
       this.logs.info('Failed to verify authentication response', { message: e.message })
 
