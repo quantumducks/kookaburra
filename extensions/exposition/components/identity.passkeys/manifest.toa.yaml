@@ -264,5 +264,6 @@ configuration:
         description: AuthenticatorSelectionCriteria.residentKey
         type: string
         enum: *requirement
+        default: required
 
 stash: ~
