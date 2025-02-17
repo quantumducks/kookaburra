@@ -202,14 +202,13 @@ exposition:
       io:output: [identity]
       endpoint: authenticate
     /challenges:
+      auth:anonymous: true
       POST:
-        auth:anonymous: true
         map:authority: authority
         io:output: &challenge [identity, challenge, timeout, userVerification, authenticatorSelection, pubKeyCredParams, allowCredentials, excludeCredentials]
         auth:incept: identity
         endpoint: challenge
       /:identity:
-        auth:id: identity
         POST:
           map:authority: authority
           map:segments:
