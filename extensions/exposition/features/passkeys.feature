@@ -10,7 +10,6 @@ Feature: Web Authentication
       """
       POST /identity/passkeys/challenges/${{ identity.id }}/ HTTP/1.1
       host: nex.toa.io
-      authorization: Token ${{ identity.token }}
       accept: application/yaml
       content-type: application/yaml
 
