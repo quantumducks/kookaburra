@@ -24,6 +24,9 @@ export class Effect implements Operation {
     if (context.configuration.residence !== undefined) {
       this.authenticator ??= {}
       this.authenticator.residentKey = context.configuration.residence
+
+      if (context.configuration.residence === 'required')
+        this.authenticator.requireResidentKey = true
     }
 
     this.enumerate = context.local.enumerate

@@ -23,6 +23,9 @@ Feature: Web Authentication
       challenge: ${{ challenge }}
       identity: ${{ identity.id }}
       timeout: 60000
+      authenticatorSelection:
+        requireResidentKey: true
+        residentKey: required
       pubKeyCredParams:
         - type: public-key
           alg: -7
@@ -53,6 +56,9 @@ Feature: Web Authentication
       challenge: ${{ challenge }}
       identity: ${{ identity }}
       timeout: 60000
+      authenticatorSelection:
+        requireResidentKey: true
+        residentKey: required
       pubKeyCredParams:
         - type: public-key
           alg: -7
