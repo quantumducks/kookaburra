@@ -47,7 +47,7 @@ export class Effect implements Operation {
       options.identity = identity ?? newid()
 
     const keys = identity === undefined
-      ? undefined
+      ? []
       : await this.enumerate({
         query: {
           criteria: `identity==${identity}`,
@@ -59,14 +59,14 @@ export class Effect implements Operation {
     if (type === 'creation')
       return {
         ...options,
-        excludeCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports })),
+        excludeCredentials: keys.map(({ kid, transports }) => ({ id: kid, transports })),
         pubKeyCredParams: this.credParams,
         authenticatorSelection: this.authenticator
       } satisfies CreationOptions
     else
       return {
         ...options,
-        allowCredentials: keys?.map(({ kid, transports }) => ({ id: kid, transports })),
+        allowCredentials: keys.map(({ kid, transports }) => ({ id: kid, transports })),
         userVerification: this.authenticator?.userVerification
       } satisfies RequestOptions
   }
